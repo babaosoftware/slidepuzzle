@@ -21,11 +21,20 @@ class Game {
   late Queue<Board> history;
   Random rnd = Random();
 
-  Game( this.type, this.gameSize) {
+  Game(this.type, this.gameSize) {
     target = createTargetBoard(gameSize, type);
     emptyCellValue = gameSize * gameSize;
     gameBoard = Board(gameSize, target);
     generateNewGame();
+  }
+
+  Game.copy(Game game) {
+    target = game.target;
+    gameSize = game.gameSize;
+    type = game.type;
+    emptyCellValue = game.emptyCellValue;
+    gameBoard = Board.copy(game.gameBoard);
+    history = Queue<Board>();
   }
 
   generateNewGame() {

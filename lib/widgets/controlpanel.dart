@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:slidepuzzle/state/cubit.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:slidepuzzle/state/controlbloc.dart';
 
 class ControlPanel extends StatefulWidget {
   const ControlPanel({Key? key}) : super(key: key);
@@ -9,32 +10,74 @@ class ControlPanel extends StatefulWidget {
 }
 
 class _ControlPanelState extends State<ControlPanel> {
-  bool autoPlay = autoPlayCubit.state;
-
   @override
   void initState() {
     super.initState();
-    autoPlayCubit.stream.listen((autoPlay) {
-      setState(() {
-        this.autoPlay = autoPlay;
-      });
-    });
   }
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      children: [
-        ElevatedButton(onPressed: () {}, child: const Text("New Game")),
-        ElevatedButton(onPressed: () {}, child: const Text("Hint")),
-        ElevatedButton(
-            onPressed: () {
-              autoPlayCubit.flip();
-            },
-            child: Text(autoPlay ? "Stop" : "Auto Play")),
-        ElevatedButton(onPressed: () {}, child: const Text("Back")),
-        ElevatedButton(onPressed: () {}, child: const Text("Restart")),
-      ],
-    );
+    final autoPlay = context.select((AutoPlayCubit bloc) => bloc.state);
+
+    return MultiBlocListener(
+        listeners: [
+          BlocListener<AutoPlayCubit, bool>(listener: (context, state) {
+            // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
+            //   context.read<TimerBloc>().add(const TimerStopped());
+            // }
+          }),
+        ],
+        child: Table(
+          columnWidths: const <int, TableColumnWidth>{
+            0: FlexColumnWidth(),
+            1: FlexColumnWidth(),
+          },
+          defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+          children: [
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: autoPlay
+                        ? null
+                        : () {
+                            context.read<NewGameCubit>().newGame();
+                          },
+                    child: const Text("New Game")),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: autoPlay
+                        ? null
+                        : () {
+                            context.read<RestartGameCubit>().restartGame();
+                          },
+                    child: const Text("Restart")),
+              ),
+            ]),
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(onPressed: autoPlay ? null : () {}, child: const Text("Hint")),
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(onPressed: autoPlay ? null : () {}, child: const Text("Back")),
+              ),
+            ]),
+            TableRow(children: [
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(
+                    onPressed: () {
+                      context.read<AutoPlayCubit>().flip();
+                    },
+                    child: Text(autoPlay ? "Stop" : "Auto Play")),
+              ),
+              Container(),
+            ]),
+          ],
+        ));
   }
 }

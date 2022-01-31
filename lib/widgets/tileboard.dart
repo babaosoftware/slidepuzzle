@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/widgets.dart';
+import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/widgets/tile.dart';
@@ -35,11 +36,28 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
   Widget build(BuildContext context) {
     _controller.reset();
     _controller.forward();
-    return SizedBox(
-      width: TileSizes.tileSize * widget.board.size,
-      height: TileSizes.tileSize * widget.board.size,
-      child: Stack(
-        children: makeTiles(),
+    return Container(
+      decoration: const BoxDecoration(
+        color: PuzzleColors.boardBackColor,
+        borderRadius: BorderRadius.all(
+          Radius.circular(12.0),
+        ),
+        border: Border(
+          top: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+          left: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+          right: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+          bottom: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+        ),
+      ),
+      child: Padding(
+        padding: const EdgeInsets.all(3.0),
+        child: SizedBox(
+          width: TileSizes.tileSize * widget.board.size,
+          height: TileSizes.tileSize * widget.board.size,
+          child: Stack(
+            children: makeTiles(),
+          ),
+        ),
       ),
     );
   }

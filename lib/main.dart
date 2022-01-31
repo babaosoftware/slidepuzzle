@@ -1,11 +1,14 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/game.dart';
 import 'package:slidepuzzle/models/hint.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
-import 'package:slidepuzzle/state/cubit.dart';
+import 'package:slidepuzzle/sizes/tilesize.dart';
+import 'package:slidepuzzle/state/controlbloc.dart';
 import 'package:slidepuzzle/widgets/controlpanel.dart';
 import 'package:slidepuzzle/widgets/tileboard.dart';
 
@@ -38,20 +41,25 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  final List<Board> _hintStack = [];
-  final Game _game = Game(BoardType.snake, 4);
+  late List<Board> _hintStack;
+  late Game _startGame;
+  late Game _game;
   late Board _currentBoard;
   late Board _prevBoard;
   late Hint hint;
 
-  void _autoPlay() {
-    if (!autoPlayCubit.state) return;
+  bool isAutoPlay = false;
+
+  void autoPlay() {
+    if (!isAutoPlay) return;
     hint = _game.getBoardHint(_hintStack);
     _game.moveValue(hint.value);
     if (!_game.checkGameSolved()) {
       Timer(const Duration(milliseconds: 500), () {
-        _autoPlay();
+        autoPlay();
       });
+    } else {
+      autoPlayCubit.flip();
     }
     Timer(const Duration(milliseconds: 10), () {
       setState(() {
@@ -61,59 +69,73 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
-  @override
-  void initState() {
-    super.initState();
-    _currentBoard = Board.copy(_game.getGameBoard());
-    _prevBoard = Board.copy(_game.getGameBoard());
-    autoPlayCubit.stream.listen((autoPlay) {
-      if (autoPlay) _autoPlay();
+  void newGame() {
+    setState(() {
+      _hintStack = [];
+      _game = Game(BoardType.snake, 4);
+      _startGame = Game.copy(_game);
+      _currentBoard = Board.copy(_game.getGameBoard());
+      _prevBoard = Board.copy(_game.getGameBoard());
+    });
+  }
+
+  void restartGame() {
+    setState(() {
+      _hintStack = [];
+      _game = Game.copy(_startGame);
+      _currentBoard = Board.copy(_game.getGameBoard());
+      _prevBoard = Board.copy(_game.getGameBoard());
     });
   }
 
   @override
+  void initState() {
+    super.initState();
+    newGame();
+  }
+
+  @override
   Widget build(BuildContext context) {
-    // This method is rerun every time setState is called, for instance as done
-    // by the _incrementCounter method above.
-    //
-    // The Flutter framework has been optimized to make rerunning build methods
-    // fast, so that you can just rebuild anything that needs updating rather
-    // than having to individually change instances of widgets.
     return Scaffold(
-      appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
-        title: Text(widget.title),
-      ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: Column(
-          // Column is also a layout widget. It takes a list of children and
-          // arranges them vertically. By default, it sizes itself to fit its
-          // children horizontally, and tries to be as tall as its parent.
-          //
-          // Invoke "debug painting" (press "p" in the console, choose the
-          // "Toggle Debug Paint" action from the Flutter Inspector in Android
-          // Studio, or the "Toggle Debug Paint" command in Visual Studio Code)
-          // to see the wireframe for each widget.
-          //
-          // Column has various properties to control how it sizes itself and
-          // how it positions its children. Here we use mainAxisAlignment to
-          // center the children vertically; the main axis here is the vertical
-          // axis because Columns are vertical (the cross axis would be
-          // horizontal).
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TileBoard(
-              _currentBoard,
-              _prevBoard,
-            ),
-            const ControlPanel(),
-          ],
+      backgroundColor: PuzzleColors.gameBack,
+        appBar: AppBar(
+          title: Text(widget.title),
         ),
-      ),
-    );
+        body: MultiBlocProvider(
+          providers: [
+            BlocProvider(create: (context) => autoPlayCubit),
+            BlocProvider(create: (context) => newGameCubit),
+            BlocProvider(create: (context) => restartGameCubit),
+          ],
+          child: MultiBlocListener(
+              listeners: [
+                BlocListener<AutoPlayCubit, bool>(listener: (context, state) {
+                  isAutoPlay = state;
+                  if (state) autoPlay();
+                }),
+                BlocListener<NewGameCubit, bool>(listener: (context, state) {
+                  newGame();
+                }),
+                BlocListener<RestartGameCubit, bool>(listener: (context, state) {
+                  restartGame();
+                }),
+              ],
+              child: Center(
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: <Widget>[
+                    TileBoard(
+                      _currentBoard,
+                      _prevBoard,
+                    ),
+                    SizedBox(
+                      width: TileSizes.tileSize * _game.gameSize,
+                      height: TileSizes.tileSize * _game.gameSize,
+                      child: const Center(child: ControlPanel())),
+                  ],
+                ),
+              )),
+        ));
   }
 }

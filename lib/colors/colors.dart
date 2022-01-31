@@ -87,4 +87,23 @@ abstract class PuzzleColors {
   static const Color yellow50 = Color(0xFF9E9400);
 
   static const Color transparent = Color(0x00000000);
+
+  static const Color colorPrimary = Color(0xFF008577);
+  static const Color colorPrimaryDark = Color(0xFF00574B);
+  static const Color colorAccent = Color(0xFFD81B60);
+  static const Color cellBackgroundColor = Color(0xFFC0C0C0);
+  static const Color cellBorderColor = Color(0xFF000000);
+  static const Color boardBackColor = Color(0xFF444444);
+  static const Color boardBorderColor = Color(0xFFAAAAAA);
+  static const Color cellEvenBackColor = Color(0xFF800000);
+  static const Color cellEvenTextColor = Color(0xFFFFFFFF);
+  static const Color cellOddBackColor = Color(0xFFFFFF00);
+  static const Color cellOddTextColor = Color(0xFF000000);
+  static const Color cellBorderColorOdd = Color(0xFFA0A0A0);
+  static const Color cellBackColorOdd = Color(0xFFFFFF00);
+  static const Color cellBorderColorEven = Color(0xFFC0C0C0);
+  static const Color cellBackColorEven = Color(0xFF800000);
+  static const Color gameBack = Color(0xFF009688);
+  static const Color textColor = Color(0xFFFFFFFF);
+  static const Color textColorDisabled = Color(0x80FFFFFF);
 }
