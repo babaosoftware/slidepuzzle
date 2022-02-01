@@ -1,6 +1,6 @@
 abstract class PuzzleBreakpoints {
   /// Max width for a small layout.
-  static const double small = 576;
+  static const double small = 700;
 
   /// Max width for a medium layout.
   static const double medium = 1200;

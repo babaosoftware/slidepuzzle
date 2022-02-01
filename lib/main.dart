@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
+import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/game.dart';
 import 'package:slidepuzzle/models/hint.dart';
@@ -88,6 +89,19 @@ class _MyHomePageState extends State<MyHomePage> {
     });
   }
 
+  void moveTile(int value) {
+    if (value == -1) return;
+    _game.moveValue(value);
+    Timer(const Duration(milliseconds: 10), () {
+      setState(() {
+        _hintStack = [];
+        _prevBoard = Board.copy(_currentBoard);
+        _currentBoard = Board.copy(_game.getGameBoard());
+      });
+    });
+    if (_game.checkGameSolved()) {}
+  }
+
   @override
   void initState() {
     super.initState();
@@ -96,8 +110,10 @@ class _MyHomePageState extends State<MyHomePage> {
 
   @override
   Widget build(BuildContext context) {
+    final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
+
     return Scaffold(
-      backgroundColor: PuzzleColors.gameBack,
+        backgroundColor: PuzzleColors.gameBack,
         appBar: AppBar(
           title: Text(widget.title),
         ),
@@ -106,6 +122,7 @@ class _MyHomePageState extends State<MyHomePage> {
             BlocProvider(create: (context) => autoPlayCubit),
             BlocProvider(create: (context) => newGameCubit),
             BlocProvider(create: (context) => restartGameCubit),
+            BlocProvider(create: (context) => tileClickCubit),
           ],
           child: MultiBlocListener(
               listeners: [
@@ -119,23 +136,34 @@ class _MyHomePageState extends State<MyHomePage> {
                 BlocListener<RestartGameCubit, bool>(listener: (context, state) {
                   restartGame();
                 }),
+                BlocListener<TileClickCubit, int>(listener: (context, state) {
+                  moveTile(state);
+                }),
               ],
               child: Center(
-                child: Column(
-                  mainAxisSize: MainAxisSize.min,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: <Widget>[
-                    TileBoard(
-                      _currentBoard,
-                      _prevBoard,
-                    ),
-                    SizedBox(
-                      width: TileSizes.tileSize * _game.gameSize,
-                      height: TileSizes.tileSize * _game.gameSize,
-                      child: const Center(child: ControlPanel())),
-                  ],
-                ),
+                child: smallScreen
+                    ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
+                    : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
               )),
         ));
+  }
+
+  List<Widget> buildWidgets() {
+    final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
+    return [
+      TileBoard(
+        _currentBoard,
+        _prevBoard,
+      ),
+      smallScreen
+          ? Padding(
+              padding: const EdgeInsets.only(top: 16.0),
+              child: SizedBox(width: TileSizes.tileSize * _game.gameSize, child: const ControlPanel()),
+            )
+          : Padding(
+              padding: const EdgeInsets.only(left: 16.0),
+              child: SizedBox(width: TileSizes.tileSize * _game.gameSize, child: const ControlPanel()),
+            )
+    ];
   }
 }
