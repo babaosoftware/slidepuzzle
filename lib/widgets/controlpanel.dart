@@ -18,10 +18,16 @@ class _ControlPanelState extends State<ControlPanel> {
   @override
   Widget build(BuildContext context) {
     final autoPlay = context.select((AutoPlayCubit bloc) => bloc.state);
+    final counter = context.select((GameCounterCubit bloc) => bloc.state);
 
     return MultiBlocListener(
         listeners: [
           BlocListener<AutoPlayCubit, bool>(listener: (context, state) {
+            // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
+            //   context.read<TimerBloc>().add(const TimerStopped());
+            // }
+          }),
+          BlocListener<GameCounterCubit, int>(listener: (context, state) {
             // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
             //   context.read<TimerBloc>().add(const TimerStopped());
             // }
@@ -59,7 +65,9 @@ class _ControlPanelState extends State<ControlPanel> {
             TableRow(children: [
               Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: ElevatedButton(onPressed: autoPlay ? null : () {}, child: const Text("Hint")),
+                child: ElevatedButton(onPressed: autoPlay ? null : () {
+                  context.read<HintCubit>().hint();
+                }, child: const Text("Hint")),
               ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
@@ -75,7 +83,10 @@ class _ControlPanelState extends State<ControlPanel> {
                     },
                     child: Text(autoPlay ? "Stop" : "Auto Play")),
               ),
-              Container(),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: ElevatedButton(onPressed: () {}, child: Text('Steps: $counter')),
+              ),
             ]),
           ],
         ));

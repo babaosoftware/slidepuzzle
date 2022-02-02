@@ -22,6 +22,32 @@ List<Target> createTargetBoard(int size, BoardType type) {
           targets.add(const Target(2, 0));
           targets.add(const Target(2, 1));
           targets.add(const Target(2, 2));
+        } else if (size == 5){
+          targets.add(const Target(0, 0));
+          targets.add(const Target(0, 1));
+          targets.add(const Target(0, 2));
+          targets.add(const Target(0, 3));
+          targets.add(const Target(0, 4));
+          targets.add(const Target(1, 0));
+          targets.add(const Target(1, 1));
+          targets.add(const Target(1, 2));
+          targets.add(const Target(1, 3));
+          targets.add(const Target(1, 4));
+          targets.add(const Target(2, 0));
+          targets.add(const Target(2, 1));
+          targets.add(const Target(2, 2));
+          targets.add(const Target(2, 3));
+          targets.add(const Target(2, 4));
+          targets.add(const Target(3, 0));
+          targets.add(const Target(3, 1));
+          targets.add(const Target(3, 2));
+          targets.add(const Target(3, 3));
+          targets.add(const Target(3, 4));
+          targets.add(const Target(4, 0));
+          targets.add(const Target(4, 1));
+          targets.add(const Target(4, 2));
+          targets.add(const Target(4, 3));
+          targets.add(const Target(4, 4));
         } else {
           targets.add(const Target(0, 0));
           targets.add(const Target(0, 1));

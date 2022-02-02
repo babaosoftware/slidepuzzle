@@ -10,21 +10,15 @@ class AutoPlayCubit extends Cubit<bool> {
   void stop() => emit(false);
 }
 
-final autoPlayCubit = AutoPlayCubit();
-
 class NewGameCubit extends Cubit<bool> {
   NewGameCubit() : super(true);
   void newGame() => emit(!state);
 }
 
-final newGameCubit = NewGameCubit();
-
 class RestartGameCubit extends Cubit<bool> {
   RestartGameCubit() : super(true);
   void restartGame() => emit(!state);
 }
-
-final restartGameCubit = RestartGameCubit();
 
 class TileClickCubit extends Cubit<int> {
   TileClickCubit() : super(-1);
@@ -36,4 +30,14 @@ class TileClickCubit extends Cubit<int> {
   }
 }
 
-final tileClickCubit = TileClickCubit();
+class HintCubit extends Cubit<bool> {
+  HintCubit() : super(true);
+  void hint() => emit(!state);
+}
+
+class GameCounterCubit extends Cubit<int> {
+  GameCounterCubit() : super(0);
+  void stepUp() => emit(state + 1);
+  void stepDown() => emit(state - 1);
+  void reset() => emit(0);
+}
