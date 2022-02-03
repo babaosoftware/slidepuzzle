@@ -10,6 +10,8 @@ import 'package:slidepuzzle/models/hint.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/controlbloc.dart';
+import 'package:slidepuzzle/state/gamebloc.dart';
+import 'package:slidepuzzle/state/gamestate.dart';
 import 'package:slidepuzzle/widgets/controlpanel.dart';
 import 'package:slidepuzzle/widgets/tileboard.dart';
 
@@ -24,11 +26,11 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  late List<Board> _hintStack;
-  late Game _startGame;
-  late Game _game;
-  late Board _currentBoard;
-  late Board _prevBoard;
+  // late List<Board> _hintStack;
+  // late Game _startGame;
+  // late Game _game;
+  // late Board _currentBoard;
+  // late Board _prevBoard;
   final autoPlayCubit = AutoPlayCubit();
   final newGameCubit = NewGameCubit();
   final restartGameCubit = RestartGameCubit();
@@ -39,68 +41,68 @@ class _GamePageState extends State<GamePage> {
   bool isAutoPlay = false;
 
   void oneMove(bool auto) async {
-    if (auto && !isAutoPlay) return;
-    Hint hint = await calculateNextMove(_game, _hintStack);
-    if (!mounted || auto && !isAutoPlay) return;
-    gameCounterCubit.stepUp();
-    if (_game.moveValue(hint.value)) _hintStack.add(Board.copy(_game.getGameBoard()));
-    if (!_game.checkGameSolved() && auto) {
-      Timer(const Duration(milliseconds: 500), () {
-        if (!mounted) return;
-        oneMove(true);
-      });
-    } else if (auto) {
-      autoPlayCubit.flip();
-    }
-    Timer(const Duration(milliseconds: 10), () {
-      if (!mounted) return;
-      setState(() {
-        _prevBoard = Board.copy(_currentBoard);
-        _currentBoard = Board.copy(_game.getGameBoard());
-      });
-    });
+    // if (auto && !isAutoPlay) return;
+    // Hint hint = await calculateNextMove(_game, _hintStack);
+    // if (!mounted || auto && !isAutoPlay) return;
+    // gameCounterCubit.stepUp();
+    // if (_game.moveValue(hint.value)) _hintStack.add(Board.copy(_game.getGameBoard()));
+    // if (!_game.checkGameSolved() && auto) {
+    //   Timer(const Duration(milliseconds: 500), () {
+    //     if (!mounted) return;
+    //     oneMove(true);
+    //   });
+    // } else if (auto) {
+    //   autoPlayCubit.flip();
+    // }
+    // Timer(const Duration(milliseconds: 10), () {
+    //   if (!mounted) return;
+    //   setState(() {
+    //     _prevBoard = Board.copy(_currentBoard);
+    //     _currentBoard = Board.copy(_game.getGameBoard());
+    //   });
+    // });
   }
 
   void newGame() {
-    gameCounterCubit.reset();
-    setState(() {
-      _hintStack = [];
-      _game = Game(widget.boardType, widget.boardSize);
-      _startGame = Game.copy(_game);
-      _currentBoard = Board.copy(_game.getGameBoard());
-      _prevBoard = Board.copy(_game.getGameBoard());
-    });
+    // gameCounterCubit.reset();
+    // setState(() {
+    //   _hintStack = [];
+    //   _game = Game(widget.boardType, widget.boardSize);
+    //   _startGame = Game.copy(_game);
+    //   _currentBoard = Board.copy(_game.getGameBoard());
+    //   _prevBoard = Board.copy(_game.getGameBoard());
+    // });
   }
 
   void restartGame() {
-    gameCounterCubit.reset();
-    setState(() {
-      _hintStack = [];
-      _game = Game.copy(_startGame);
-      _currentBoard = Board.copy(_game.getGameBoard());
-      _prevBoard = Board.copy(_game.getGameBoard());
-    });
+    // gameCounterCubit.reset();
+    // setState(() {
+    //   _hintStack = [];
+    //   _game = Game.copy(_startGame);
+    //   _currentBoard = Board.copy(_game.getGameBoard());
+    //   _prevBoard = Board.copy(_game.getGameBoard());
+    // });
   }
 
   void moveTile(int value) {
-    if (value == -1) return;
-    if (_game.moveValue(value)) {
-      gameCounterCubit.stepUp();
-      Timer(const Duration(milliseconds: 10), () {
-        setState(() {
-          _hintStack = [];
-          _prevBoard = Board.copy(_currentBoard);
-          _currentBoard = Board.copy(_game.getGameBoard());
-        });
-      });
-      if (_game.checkGameSolved()) {}
-    }
+    // if (value == -1) return;
+    // if (_game.moveValue(value)) {
+    //   gameCounterCubit.stepUp();
+    //   Timer(const Duration(milliseconds: 10), () {
+    //     setState(() {
+    //       _hintStack = [];
+    //       _prevBoard = Board.copy(_currentBoard);
+    //       _currentBoard = Board.copy(_game.getGameBoard());
+    //     });
+    //   });
+    //   if (_game.checkGameSolved()) {}
+    // }
   }
 
   @override
   void initState() {
     super.initState();
-    newGame();
+    //newGame();
   }
 
   @override
@@ -125,6 +127,7 @@ class _GamePageState extends State<GamePage> {
             BlocProvider(create: (context) => tileClickCubit),
             BlocProvider(create: (context) => gameCounterCubit),
             BlocProvider(create: (context) => hintCubit),
+            BlocProvider(create: (context) => GameBloc(widget.boardType, widget.boardSize)),
           ],
           child: MultiBlocListener(
               listeners: [
@@ -154,21 +157,9 @@ class _GamePageState extends State<GamePage> {
   }
 
   List<Widget> buildWidgets() {
-    final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
     return [
-      TileBoard(
-        _currentBoard,
-        _prevBoard,
-      ),
-      smallScreen
-          ? Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: SizedBox(width: TileSizes.tileSize * _game.gameSize, child: const ControlPanel()),
-            )
-          : Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: SizedBox(width: TileSizes.tileSize * _game.gameSize, child: const ControlPanel()),
-            )
+      const TileBoard(),
+      const ControlPanel(),
     ];
   }
 }

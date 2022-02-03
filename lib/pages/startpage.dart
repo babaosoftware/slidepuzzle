@@ -42,7 +42,7 @@ class _StartPageState extends State<StartPage> {
           ElevatedButton(onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "3x3 Snake", boardType: BoardType.reverse, boardSize: 3)));
+              MaterialPageRoute(builder: (context) => const GamePage(title: "3x3 Snake", boardType: BoardType.snake, boardSize: 3)));
           }, child: const Text("3x3 Snake")),
           ElevatedButton(onPressed: (){
             Navigator.push(
@@ -62,7 +62,7 @@ class _StartPageState extends State<StartPage> {
           ElevatedButton(onPressed: (){
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "4x4 Snake", boardType: BoardType.reverse, boardSize: 4)));
+              MaterialPageRoute(builder: (context) => const GamePage(title: "4x4 Snake", boardType: BoardType.snake, boardSize: 4)));
           }, child: const Text("4x4 Snake")),
           ElevatedButton(onPressed: (){
             Navigator.push(

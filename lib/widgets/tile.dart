@@ -3,6 +3,8 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/controlbloc.dart';
+import 'package:slidepuzzle/state/gamebloc.dart';
+import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/typography/text_styles.dart';
 
 class Tile extends StatelessWidget {
@@ -13,7 +15,6 @@ class Tile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<TileClickCubit, int>(builder: (context, state) {
       return SizedBox(
         width: TileSizes.tileSize,
         height: TileSizes.tileSize,
@@ -53,13 +54,12 @@ class Tile extends StatelessWidget {
               onPressed: isEmpty
                   ? null
                   : () {
-                      context.read<TileClickCubit>().tileClick(value);
+                      context.read<GameBloc>().add(TileClick(value));
                     },
               child: Text(isEmpty ? '' : value.toString()),
             ),
           ),
         ),
       );
-    });
   }
 }
