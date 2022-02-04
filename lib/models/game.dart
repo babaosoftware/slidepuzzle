@@ -21,11 +21,14 @@ class Game {
   late Queue<Board> history;
   Random rnd = Random();
 
-  Game(this.type, this.gameSize) {
+  Game(this.type, this.gameSize, {bool newGame = true}) {
     target = createTargetBoard(gameSize, type);
     emptyCellValue = gameSize * gameSize;
     gameBoard = Board(gameSize, target);
-    generateNewGame();
+    history = Queue<Board>();
+    if (newGame){
+      simulateGame();
+    }
   }
 
   Game.copy(Game game) {
@@ -34,14 +37,13 @@ class Game {
     type = game.type;
     emptyCellValue = game.emptyCellValue;
     gameBoard = Board.copy(game.gameBoard);
-    history = Queue<Board>();
+    history = game.history;
   }
 
-  generateNewGame() {
-    history = Queue<Board>();
-    gameBoard = Board(gameSize, target);
-    simulateGame();
-  }
+  // Game.fromBoard(this.type, this.gameSize, this.gameBoard){
+  //   target = createTargetBoard(gameSize, type);
+  //   emptyCellValue = gameSize * gameSize;
+  // }
 
   Board getGameBoard() {
     return gameBoard;

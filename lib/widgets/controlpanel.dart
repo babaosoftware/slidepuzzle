@@ -24,31 +24,33 @@ class _ControlPanelState extends State<ControlPanel> {
     final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
     final state = context.select((GameBloc bloc) => bloc.state);
 
-    return MultiBlocListener(listeners: [
-      BlocListener<AutoPlayCubit, bool>(listener: (context, state) {
-        // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
-        //   context.read<TimerBloc>().add(const TimerStopped());
-        // }
-      }),
-      BlocListener<GameCounterCubit, int>(listener: (context, state) {
-        // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
-        //   context.read<TimerBloc>().add(const TimerStopped());
-        // }
-      }),
-    ], child: smallScreen
-          ? Padding(
-              padding: const EdgeInsets.only(top: 16.0),
-              child: SizedBox(width: TileSizes.tileSize * state.boardSize, child: buildTable()),
-            )
-          : Padding(
-              padding: const EdgeInsets.only(left: 16.0),
-              child: SizedBox(width: TileSizes.tileSize * state.boardSize, child: buildTable()),
-            ));
+    return MultiBlocListener(
+        listeners: [
+          BlocListener<AutoPlayCubit, bool>(listener: (context, state) {
+            // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
+            //   context.read<TimerBloc>().add(const TimerStopped());
+            // }
+          }),
+          BlocListener<GameCounterCubit, int>(listener: (context, state) {
+            // if (theme.hasTimer && state.puzzleStatus == PuzzleStatus.complete) {
+            //   context.read<TimerBloc>().add(const TimerStopped());
+            // }
+          }),
+        ],
+        child: smallScreen
+            ? Padding(
+                padding: const EdgeInsets.only(top: 16.0),
+                child: SizedBox(width: TileSizes.tileSize * state.boardSize, child: buildTable()),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(left: 16.0),
+                child: SizedBox(width: TileSizes.tileSize * state.boardSize, child: buildTable()),
+              ));
   }
 
   Widget buildTable() {
+    final state = context.select((GameBloc bloc) => bloc.state);
     final autoPlay = context.select((AutoPlayCubit bloc) => bloc.state);
-    final counter = context.select((GameCounterCubit bloc) => bloc.state);
     return Table(
       columnWidths: const <int, TableColumnWidth>{
         0: FlexColumnWidth(),
@@ -85,13 +87,19 @@ class _ControlPanelState extends State<ControlPanel> {
                 onPressed: autoPlay
                     ? null
                     : () {
-                        context.read<HintCubit>().hint();
+                        context.read<GameBloc>().add(const GameHint());
                       },
                 child: const Text("Hint")),
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: autoPlay ? null : () {}, child: const Text("Back")),
+            child: ElevatedButton(
+                onPressed: autoPlay
+                    ? null
+                    : () {
+                        context.read<GameBloc>().add(const GameBack());
+                      },
+                child: const Text("Back")),
           ),
         ]),
         TableRow(children: [
@@ -105,7 +113,7 @@ class _ControlPanelState extends State<ControlPanel> {
           ),
           Padding(
             padding: const EdgeInsets.all(8.0),
-            child: ElevatedButton(onPressed: () {}, child: Text('Steps: $counter')),
+            child: ElevatedButton(onPressed: () {}, child: Text('Steps: ${state.counter}')),
           ),
         ]),
       ],

@@ -1,7 +1,10 @@
-import 'package:flutter/widgets.dart';
+import 'dart:async';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/game.dart';
+import 'package:slidepuzzle/models/hint.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
@@ -12,6 +15,10 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     on<TileClick>(_onTileClick);
     on<NewGame>(_onNewGame);
     on<RestartGame>(_onRestartGame);
+    on<StartAutoPlay>(_onStartAutoPlay);
+    on<GameHint>(_onGameHint);
+    on<GameHintReceived>(_onGameHintReceived);
+    on<GameBack>(_onGameBack);
   }
 
   final BoardType boardType;
@@ -20,36 +27,118 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onTileClick(TileClick event, Emitter<GameState> emit) {
     if (state.game.moveValue(event.value)) {
       emit(state.copyWith(
-          game: Game.copy(state.game),
-          newGame: false,
-          solved: state.game.checkGameSolved(),
-          hintStack: [],
-          prevBoard: Board.copy(state.currentBoard),
-          currentBoard: Board.copy(state.game.getGameBoard())));
+        game: Game.copy(state.game),
+        boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
+        hintStack: [],
+        prevBoard: Board.copy(state.currentBoard),
+        currentBoard: Board.copy(state.game.getGameBoard()),
+        counter: state.counter + 1,
+      ));
     }
   }
 
   void _onNewGame(NewGame event, Emitter<GameState> emit) {
     Game newGame = Game(boardType, boardSize);
     emit(state.copyWith(
-        game: newGame,
-        startGame: Game.copy(newGame),
-        newGame: true,
-        solved: false,
-        hintStack: [],
-        prevBoard: Board.copy(state.game.getGameBoard()),
-        currentBoard: Board.copy(newGame.getGameBoard())));
+      game: newGame,
+      startGame: Game.copy(newGame),
+      boardState: BoardState.start,
+      hintStack: [],
+      prevBoard: Board.copy(state.game.getGameBoard()),
+      currentBoard: Board.copy(newGame.getGameBoard()),
+      counter: 0,
+    ));
+  }
+
+  void _onGameBack(GameBack event, Emitter<GameState> emit) {
+    Game backGame = Game.copy(state.game);
+    backGame.moveBack();
+    emit(state.copyWith(
+      game: backGame,
+      hintStack: [],
+      prevBoard: Board.copy(state.game.getGameBoard()),
+      currentBoard: Board.copy(backGame.getGameBoard()),
+      counter: state.counter - 1,
+    ));
   }
 
   void _onRestartGame(RestartGame event, Emitter<GameState> emit) {
     emit(state.copyWith(
-        game: Game.copy(state.startGame),
-        newGame: true,
-        solved: false,
-        hintStack: [],
-        prevBoard: Board.copy(state.game.getGameBoard()),
-        currentBoard: Board.copy(state.startGame.getGameBoard())));
+      game: Game.copy(state.startGame),
+      boardState: BoardState.start,
+      hintStack: [],
+      prevBoard: Board.copy(state.game.getGameBoard()),
+      currentBoard: Board.copy(state.startGame.getGameBoard()),
+      counter: 0,
+    ));
   }
+
+  void _onGameHintReceived(GameHintReceived event, Emitter<GameState> emit) {
+    if (state.game.moveValue(event.value)) {
+      emit(state.copyWith(
+        game: Game.copy(state.game),
+        boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
+        hintStack: [],
+        prevBoard: Board.copy(state.currentBoard),
+        currentBoard: Board.copy(state.game.getGameBoard()),
+        counter: state.counter + 1,
+      ));
+    }
+  }
+
+  void _onGameHint(GameHint event, Emitter<GameState> emit) {
+    GameState newState = state.copyWith(boardState: BoardState.hint, prevBoard: Board.copy(state.currentBoard));
+    emit(newState);
+    Timer(const Duration(milliseconds: 500), () async {
+      // final stopwatch = Stopwatch();
+      // stopwatch.start();
+      Hint hint = await calculateNextMove(Game.copy(state.game), state.hintStack);
+      // int elapsed = stopwatch.elapsedMilliseconds;
+      // stopwatch.stop();
+      // int transitionTime = GameState.stateTransitionTime(BoardState.hint);
+      // if (elapsed < transitionTime) {
+      //   Timer(Duration(milliseconds: transitionTime - elapsed), () {
+      //     add(GameHintReceived(hint.value));
+      //   });
+      // } else {
+      add(GameHintReceived(hint.value));
+      // }
+    });
+  }
+
+  void _onStartAutoPlay(StartAutoPlay event, Emitter<GameState> emit) {
+    // emit(state.copyWith(
+    //     game: Game.copy(state.startGame),
+    //     boardState: BoardState.start,
+    //     hintStack: [],
+    //     prevBoard: Board.copy(state.game.getGameBoard()),
+    //     currentBoard: Board.copy(state.startGame.getGameBoard())));
+  }
+
+  Future<Hint> calculateNextMove(Game game, List<Board> hintStack) {
+    return compute(calculateMove, game);
+  }
+
+  Hint calculateMove(Game game) {
+    return game.getBoardHint([]);
+  }
+
+// emit was called after an event handler completed normally.
+// This is usually due to an unawaited future in an event handler.
+// Please make sure to await all asynchronous operations with event handlers
+// and use emit.isDone after asynchronous operations before calling emit() to
+// ensure the event handler has not completed.
+
+//   **BAD**
+//     on<Event>((event, emit) {
+
+// future.whenComplete(() => emit(...));
+//   });
+
+//     **GOOD**
+//       on<Event>((event, emit) async {
+//             await future.whenComplete(() => emit(...));
+//               });
 
   // void _onPuzzleInitialized(
   //   PuzzleInitialized event,

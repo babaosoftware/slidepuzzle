@@ -6,6 +6,7 @@ import 'package:provider/src/provider.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
+import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
 import 'package:slidepuzzle/widgets/tile.dart';
 
@@ -17,13 +18,15 @@ class TileBoard extends StatefulWidget {
 }
 
 class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
-
   late AnimationController _controller;
   bool firstBuild = true;
 
   @override
   void initState() {
     super.initState();
+    Timer(Duration(milliseconds: GameState.stateTransitionTime(BoardState.loading) + 10), () {
+      context.read<GameBloc>().add(const NewGame());
+    });
   }
 
   @override
@@ -34,39 +37,37 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<GameBloc, GameState>(
-      builder: (context, state) {
-        _controller = AnimationController(
-          duration: Duration(milliseconds: state.newGame ? 2000: 300),
-          vsync: this,
-        );
-        _controller.forward();
-        return Container(
-          decoration: const BoxDecoration(
-            color: PuzzleColors.boardBackColor,
-            borderRadius: BorderRadius.all(
-              Radius.circular(12.0),
-            ),
-            border: Border(
-              top: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-              left: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-              right: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-              bottom: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+    return BlocBuilder<GameBloc, GameState>(builder: (context, state) {
+      _controller = AnimationController(
+        duration: Duration(milliseconds: GameState.stateTransitionTime(state.boardState)),
+        vsync: this,
+      );
+      _controller.forward();
+      return Container(
+        decoration: const BoxDecoration(
+          color: PuzzleColors.boardBackColor,
+          borderRadius: BorderRadius.all(
+            Radius.circular(12.0),
+          ),
+          border: Border(
+            top: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+            left: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+            right: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+            bottom: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(3.0),
+          child: SizedBox(
+            width: TileSizes.tileSize * state.currentBoard.size,
+            height: TileSizes.tileSize * state.currentBoard.size,
+            child: Stack(
+              children: makeTiles(state),
             ),
           ),
-          child: Padding(
-            padding: const EdgeInsets.all(3.0),
-            child: SizedBox(
-              width: TileSizes.tileSize * state.currentBoard.size,
-              height: TileSizes.tileSize * state.currentBoard.size,
-              child: Stack(
-                children: makeTiles(state),
-              ),
-            ),
-          ),
-        );
-      }
-    );
+        ),
+      );
+    });
   }
 
   List<Widget> makeTiles(GameState state) {
@@ -112,7 +113,7 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
               RelativeRect.fromSize(Rect.fromLTWH(TileSizes.tileSize * prevj, TileSizes.tileSize * previ, TileSizes.tileSize, TileSizes.tileSize), parentSize),
           end: RelativeRect.fromSize(
               Rect.fromLTWH(TileSizes.tileSize * currentj, TileSizes.tileSize * currenti, TileSizes.tileSize, TileSizes.tileSize), parentSize),
-        ).animate(CurvedAnimation(parent: _controller, curve: state.newGame ? Curves.easeInOutQuart : Curves.linear)),
+        ).animate(CurvedAnimation(parent: _controller, curve: state.boardState == BoardState.start ? Curves.easeInOutQuart : Curves.linear)),
         child: tile,
       );
     }

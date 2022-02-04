@@ -11,6 +11,7 @@ import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/controlbloc.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
+import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
 import 'package:slidepuzzle/widgets/controlpanel.dart';
 import 'package:slidepuzzle/widgets/tileboard.dart';
@@ -102,7 +103,6 @@ class _GamePageState extends State<GamePage> {
   @override
   void initState() {
     super.initState();
-    //newGame();
   }
 
   @override
@@ -164,10 +164,3 @@ class _GamePageState extends State<GamePage> {
   }
 }
 
-Future<Hint> calculateNextMove(Game game, List<Board> hintStack) {
-  return compute(calculateMove, game);
-}
-
-Hint calculateMove(Game game) {
-  return game.getBoardHint([]);
-}

@@ -3,22 +3,24 @@ import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/game.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 
+enum BoardState { loading, start, ongoing, hint, end }
+
 class GameState extends Equatable {
   GameState(
     this.boardType,
     this.boardSize,
   ) {
     hintStack = [];
-    game = Game(boardType, boardSize);
+    game = Game(boardType, boardSize, newGame: false);
     startGame = Game.copy(game);
     currentBoard = Board.copy(game.getGameBoard());
-    prevBoard = Board(boardSize, createTargetBoard(boardSize, boardType));
+    prevBoard = Board.copy(currentBoard);
     autoPlay = false;
-    newGame = true;
-    solved = false;
+    boardState = BoardState.loading;
+    counter = 0;
   }
 
-  GameState.copy(this.boardType, this.boardSize, this.hintStack, this.game, this.startGame, this.currentBoard, this.prevBoard, this.autoPlay, this.newGame, this.solved);
+  GameState.copy(this.boardType, this.boardSize, this.hintStack, this.game, this.startGame, this.currentBoard, this.prevBoard, this.autoPlay, this.boardState, this.counter);
 
   GameState copyWith({
     BoardType? boardType,
@@ -29,11 +31,11 @@ class GameState extends Equatable {
     Board? currentBoard,
     Board? prevBoard,
     bool? autoPlay,
-    bool? newGame,
-    bool? solved,
+    BoardState? boardState,
+    int? counter,
   }) {
     return GameState.copy(boardType ?? this.boardType, boardSize ?? this.boardSize, hintStack ?? this.hintStack, game ?? this.game, startGame ?? this.startGame,
-        currentBoard ?? this.currentBoard, prevBoard ?? this.prevBoard, autoPlay ?? this.autoPlay, newGame ?? this.newGame, solved ?? this.solved);
+        currentBoard ?? this.currentBoard, prevBoard ?? this.prevBoard, autoPlay ?? this.autoPlay, boardState ?? this.boardState, counter ?? this.counter);
   }
 
   final BoardType boardType;
@@ -44,9 +46,24 @@ class GameState extends Equatable {
   late final Board currentBoard;
   late final Board prevBoard;
   late final bool autoPlay;
-  late final bool newGame;
-  late final bool solved;
+  late final BoardState boardState;
+  late final int counter;
+
+  static int stateTransitionTime(BoardState boardState) {
+    switch (boardState) {
+      case BoardState.loading:
+        return 2000;
+      case BoardState.start:
+        return 1000;
+      case BoardState.ongoing:
+        return 300;
+      case BoardState.end:
+        return 300;
+      case BoardState.hint:
+        return 300;
+    }
+  }
 
   @override
-  List<Object?> get props => [game, currentBoard, autoPlay, newGame, solved];
+  List<Object?> get props => [game, currentBoard, autoPlay, boardState, counter];
 }
