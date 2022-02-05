@@ -18,14 +18,14 @@ class TileBoardLight extends StatelessWidget {
           Radius.circular(12.0),
         ),
         border: Border(
-          top: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-          left: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-          right: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-          bottom: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+          top: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
+          left: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
+          right: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
+          bottom: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
         ),
       ),
       child: Padding(
-        padding: const EdgeInsets.all(3.0),
+        padding: const EdgeInsets.all(1.0),
         child: SizedBox(
           width: TileSizes.lightTileSize * board.size,
           height: TileSizes.lightTileSize * board.size,

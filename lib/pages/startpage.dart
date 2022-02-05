@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:slidepuzzle/colors/colors.dart';
+import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
@@ -15,62 +16,103 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-
   @override
   Widget build(BuildContext context) {
-    // final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
+    final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
 
     return Scaffold(
         backgroundColor: PuzzleColors.gameBack,
         appBar: AppBar(
-          title: const Text("8/15 Puzzle"),
+          title: const Text("Pick a game board"),
         ),
-        body: ListView(children: [
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "3x3 Horizontal", boardType: BoardType.basic, boardSize: 3)));
-          }, child: TileBoardLight(Board(3, createTargetBoard(3, BoardType.basic)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "3x3 Reverse", boardType: BoardType.reverse, boardSize: 3)));
-          }, child: TileBoardLight(Board(3, createTargetBoard(3, BoardType.reverse)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "3x3 Spiral", boardType: BoardType.spiral, boardSize: 3)));
-          }, child: TileBoardLight(Board(3, createTargetBoard(3, BoardType.spiral)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "3x3 Snake", boardType: BoardType.snake, boardSize: 3)));
-          }, child: TileBoardLight(Board(3, createTargetBoard(3, BoardType.snake)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "4x4 Horizontal", boardType: BoardType.basic, boardSize: 4)));
-          }, child: TileBoardLight(Board(4, createTargetBoard(4, BoardType.basic)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "4x4 Reverse", boardType: BoardType.reverse, boardSize: 4)));
-          }, child: TileBoardLight(Board(4, createTargetBoard(4, BoardType.reverse)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "4x4 Spiral", boardType: BoardType.spiral, boardSize: 4)));
-          }, child: TileBoardLight(Board(4, createTargetBoard(4, BoardType.spiral)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "4x4 Snake", boardType: BoardType.snake, boardSize: 4)));
-          }, child: TileBoardLight(Board(4, createTargetBoard(4, BoardType.snake)))),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const GamePage(title: "5x5 Horizontal", boardType: BoardType.basic, boardSize: 5)));
-          }, child: TileBoardLight(Board(5, createTargetBoard(5, BoardType.basic)))),
-        ],));
+        body: SingleChildScrollView(
+          child: smallScreen ? oneColumnTable() : twoColumnTable(),
+        ));
+  }
+
+  Widget startCell(String title, BoardType boardType, int boardSize) {
+    return Center(
+        child: Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(bottom: 4.0),
+            child: Text(
+              title,
+              style: const TextStyle(color: PuzzleColors.white, fontSize: 16),
+            ),
+          ),
+          InkWell(
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage(title: title, boardType: boardType, boardSize: boardSize)));
+              },
+              child: TileBoardLight(Board(boardSize, createTargetBoard(boardSize, boardType)))),
+        ],
+      ),
+    ));
+  }
+
+  Widget oneColumnTable() {
+    return Table(
+      columnWidths: const <int, TableColumnWidth>{
+        0: FlexColumnWidth(),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: [
+        TableRow(children: [
+          startCell("3x3 Horizontal", BoardType.basic, 3),
+        ]),
+        TableRow(children: [
+          startCell("3x3 Reverse", BoardType.reverse, 3),
+        ]),
+        TableRow(children: [
+          startCell("3x3 Spiral", BoardType.spiral, 3),
+        ]),
+        TableRow(children: [
+          startCell("3x3 Snake", BoardType.snake, 3),
+        ]),
+        TableRow(children: [
+          startCell("4x4 Horizontal", BoardType.basic, 4),
+        ]),
+        TableRow(children: [
+          startCell("4x4 Reverse", BoardType.reverse, 4),
+        ]),
+        TableRow(children: [
+          startCell("4x4 Spiral", BoardType.spiral, 4),
+        ]),
+        TableRow(children: [
+          startCell("4x4 Snake", BoardType.snake, 4),
+        ]),
+      ],
+    );
+  }
+
+  Widget twoColumnTable() {
+    return Table(
+      columnWidths: const <int, TableColumnWidth>{
+        0: FlexColumnWidth(),
+        1: FlexColumnWidth(),
+      },
+      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+      children: [
+        TableRow(children: [
+          startCell("3x3 Horizontal", BoardType.basic, 3),
+          startCell("3x3 Reverse", BoardType.reverse, 3),
+        ]),
+        TableRow(children: [
+          startCell("3x3 Spiral", BoardType.spiral, 3),
+          startCell("3x3 Snake", BoardType.snake, 3),
+        ]),
+        TableRow(children: [
+          startCell("4x4 Horizontal", BoardType.basic, 4),
+          startCell("4x4 Reverse", BoardType.reverse, 4),
+        ]),
+        TableRow(children: [
+          startCell("4x4 Spiral", BoardType.spiral, 4),
+          startCell("4x4 Snake", BoardType.snake, 4),
+        ]),
+      ],
+    );
   }
 }
