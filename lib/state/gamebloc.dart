@@ -11,11 +11,11 @@ import 'package:slidepuzzle/state/gamestate.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
   GameBloc(this.boardType, this.boardSize) : super(GameState(boardType, boardSize)) {
-    // on<PuzzleInitialized>(_onPuzzleInitialized);
-    on<TileClick>(_onTileClick);
+    on<InitializeGame>(_onInitializeGame);
     on<NewGame>(_onNewGame);
+    on<TileClick>(_onTileClick);
     on<RestartGame>(_onRestartGame);
-    on<StartAutoPlay>(_onStartAutoPlay);
+    on<AutoPlay>(_onAutoPlay);
     on<GameHint>(_onGameHint);
     on<GameHintReceived>(_onGameHintReceived);
     on<GameBack>(_onGameBack);
@@ -24,15 +24,18 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   final BoardType boardType;
   final int boardSize;
 
-  void _onTileClick(TileClick event, Emitter<GameState> emit) {
-    if (state.game.moveValue(event.value)) {
+  void _onInitializeGame(InitializeGame event, Emitter<GameState> emit) {
+    if (!state.initialized) {
+      Game newGame = Game(boardType, boardSize);
       emit(state.copyWith(
-        game: Game.copy(state.game),
-        boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
+        game: newGame,
+        startGame: Game.copy(newGame),
+        boardState: BoardState.start,
         hintStack: [],
-        prevBoard: Board.copy(state.currentBoard),
-        currentBoard: Board.copy(state.game.getGameBoard()),
-        counter: state.counter + 1,
+        prevBoard: Board.copy(state.game.getGameBoard()),
+        currentBoard: Board.copy(newGame.getGameBoard()),
+        counter: 0,
+        initialized: true,
       ));
     }
   }
@@ -50,15 +53,30 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     ));
   }
 
+  void _onTileClick(TileClick event, Emitter<GameState> emit) {
+    if (state.game.moveValue(event.value)) {
+      emit(state.copyWith(
+        game: Game.copy(state.game),
+        boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
+        hintStack: [],
+        prevBoard: Board.copy(state.currentBoard),
+        currentBoard: Board.copy(state.game.getGameBoard()),
+        counter: state.counter + 1,
+      ));
+    }
+  }
+
   void _onGameBack(GameBack event, Emitter<GameState> emit) {
     Game backGame = Game.copy(state.game);
     backGame.moveBack();
+    int newCounter = state.counter - 1;
     emit(state.copyWith(
       game: backGame,
+      boardState: newCounter <= 0 ? BoardState.start : BoardState.ongoing,
       hintStack: [],
       prevBoard: Board.copy(state.game.getGameBoard()),
       currentBoard: Board.copy(backGame.getGameBoard()),
-      counter: state.counter - 1,
+      counter: newCounter,
     ));
   }
 
@@ -75,9 +93,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onGameHintReceived(GameHintReceived event, Emitter<GameState> emit) {
     if (state.game.moveValue(event.value)) {
+      bool gameSolved = state.game.checkGameSolved();
       emit(state.copyWith(
         game: Game.copy(state.game),
-        boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
+        autoPlay: gameSolved ? false : state.autoPlay,
+        boardState: gameSolved ? BoardState.end : BoardState.ongoing,
         hintStack: [],
         prevBoard: Board.copy(state.currentBoard),
         currentBoard: Board.copy(state.game.getGameBoard()),
@@ -86,10 +106,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
-  void _onGameHint(GameHint event, Emitter<GameState> emit) {
-    GameState newState = state.copyWith(boardState: BoardState.hint, prevBoard: Board.copy(state.currentBoard));
-    emit(newState);
-    Timer(const Duration(milliseconds: 500), () async {
+  void _gameHint() {
+    Timer(const Duration(milliseconds: 400), () async {
       // final stopwatch = Stopwatch();
       // stopwatch.start();
       Hint hint = await calculateNextMove(Game.copy(state.game), state.hintStack);
@@ -101,12 +119,21 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       //     add(GameHintReceived(hint.value));
       //   });
       // } else {
+      if (isClosed || !state.autoPlay) return;
       add(GameHintReceived(hint.value));
+      _gameHint();
       // }
     });
   }
 
-  void _onStartAutoPlay(StartAutoPlay event, Emitter<GameState> emit) {
+  void _onGameHint(GameHint event, Emitter<GameState> emit) {
+    emit(state.copyWith(boardState: BoardState.hint, prevBoard: Board.copy(state.currentBoard)));
+    _gameHint();
+  }
+
+  void _onAutoPlay(AutoPlay event, Emitter<GameState> emit) {
+    emit(state.copyWith(autoPlay: !state.autoPlay, boardState: BoardState.ongoing, prevBoard: Board.copy(state.currentBoard)));
+    _gameHint();
     // emit(state.copyWith(
     //     game: Game.copy(state.startGame),
     //     boardState: BoardState.start,

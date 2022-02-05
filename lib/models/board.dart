@@ -132,7 +132,7 @@ class Board {
       for (int j = 0; j < size; j++) {
         int value = board[i][j];
         Target targetCell = target[value - 1];
-        count += ((i - targetCell.i).abs() + (j - targetCell.j).abs()) * (size == 3 ? 1 : (size));
+        count += ((i - targetCell.i).abs() + (j - targetCell.j).abs()) * (size == 3 ? 1 : (size * 10));
       }
     }
     return count;

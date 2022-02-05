@@ -1,18 +1,9 @@
-import 'dart:async';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/layouts/breakpoints.dart';
-import 'package:slidepuzzle/models/board.dart';
-import 'package:slidepuzzle/models/game.dart';
-import 'package:slidepuzzle/models/hint.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
-import 'package:slidepuzzle/sizes/tilesize.dart';
-import 'package:slidepuzzle/state/controlbloc.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
-import 'package:slidepuzzle/state/gameevent.dart';
-import 'package:slidepuzzle/state/gamestate.dart';
 import 'package:slidepuzzle/widgets/controlpanel.dart';
 import 'package:slidepuzzle/widgets/tileboard.dart';
 
@@ -27,21 +18,10 @@ class GamePage extends StatefulWidget {
 }
 
 class _GamePageState extends State<GamePage> {
-  // late List<Board> _hintStack;
-  // late Game _startGame;
-  // late Game _game;
-  // late Board _currentBoard;
-  // late Board _prevBoard;
-  final autoPlayCubit = AutoPlayCubit();
-  final newGameCubit = NewGameCubit();
-  final restartGameCubit = RestartGameCubit();
-  final tileClickCubit = TileClickCubit();
-  final gameCounterCubit = GameCounterCubit();
-  final hintCubit = HintCubit();
 
-  bool isAutoPlay = false;
+  late GameBloc gameBloc;
 
-  void oneMove(bool auto) async {
+  // void oneMove(bool auto) async {
     // if (auto && !isAutoPlay) return;
     // Hint hint = await calculateNextMove(_game, _hintStack);
     // if (!mounted || auto && !isAutoPlay) return;
@@ -62,9 +42,9 @@ class _GamePageState extends State<GamePage> {
     //     _currentBoard = Board.copy(_game.getGameBoard());
     //   });
     // });
-  }
+  // }
 
-  void newGame() {
+  // void newGame() {
     // gameCounterCubit.reset();
     // setState(() {
     //   _hintStack = [];
@@ -73,9 +53,9 @@ class _GamePageState extends State<GamePage> {
     //   _currentBoard = Board.copy(_game.getGameBoard());
     //   _prevBoard = Board.copy(_game.getGameBoard());
     // });
-  }
+  // }
 
-  void restartGame() {
+  // void restartGame() {
     // gameCounterCubit.reset();
     // setState(() {
     //   _hintStack = [];
@@ -83,9 +63,9 @@ class _GamePageState extends State<GamePage> {
     //   _currentBoard = Board.copy(_game.getGameBoard());
     //   _prevBoard = Board.copy(_game.getGameBoard());
     // });
-  }
+  // }
 
-  void moveTile(int value) {
+  // void moveTile(int value) {
     // if (value == -1) return;
     // if (_game.moveValue(value)) {
     //   gameCounterCubit.stepUp();
@@ -98,17 +78,18 @@ class _GamePageState extends State<GamePage> {
     //   });
     //   if (_game.checkGameSolved()) {}
     // }
-  }
+  // }
 
   @override
   void initState() {
+    gameBloc = GameBloc(widget.boardType, widget.boardSize);
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -121,38 +102,13 @@ class _GamePageState extends State<GamePage> {
         ),
         body: MultiBlocProvider(
           providers: [
-            BlocProvider(create: (context) => autoPlayCubit),
-            BlocProvider(create: (context) => newGameCubit),
-            BlocProvider(create: (context) => restartGameCubit),
-            BlocProvider(create: (context) => tileClickCubit),
-            BlocProvider(create: (context) => gameCounterCubit),
-            BlocProvider(create: (context) => hintCubit),
-            BlocProvider(create: (context) => GameBloc(widget.boardType, widget.boardSize)),
+            BlocProvider(create: (context) => gameBloc),
           ],
-          child: MultiBlocListener(
-              listeners: [
-                BlocListener<AutoPlayCubit, bool>(listener: (context, state) {
-                  isAutoPlay = state;
-                  if (state) oneMove(true);
-                }),
-                BlocListener<NewGameCubit, bool>(listener: (context, state) {
-                  newGame();
-                }),
-                BlocListener<RestartGameCubit, bool>(listener: (context, state) {
-                  restartGame();
-                }),
-                BlocListener<TileClickCubit, int>(listener: (context, state) {
-                  moveTile(state);
-                }),
-                BlocListener<HintCubit, bool>(listener: (context, state) {
-                  oneMove(false);
-                }),
-              ],
-              child: Center(
-                child: smallScreen
-                    ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
-                    : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
-              )),
+          child: Center(
+            child: smallScreen
+                ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
+                : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
+          ),
         ));
   }
 

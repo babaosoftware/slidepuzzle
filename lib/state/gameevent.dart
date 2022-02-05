@@ -12,6 +12,10 @@ class NewGame extends GameEvent {
   const NewGame();
 }
 
+class InitializeGame extends GameEvent {
+  const InitializeGame();
+}
+
 class RestartGame extends GameEvent {
   const RestartGame();
 }
@@ -24,12 +28,8 @@ class TileClick extends GameEvent {
   List<Object> get props => [value];
 }
 
-class StartAutoPlay extends GameEvent {
-  const StartAutoPlay();
-}
-
-class StopAutoPlay extends GameEvent {
-  const StopAutoPlay();
+class AutoPlay extends GameEvent {
+  const AutoPlay();
 }
 
 class GameHint extends GameEvent {

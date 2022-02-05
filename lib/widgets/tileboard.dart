@@ -25,7 +25,9 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
   void initState() {
     super.initState();
     Timer(Duration(milliseconds: GameState.stateTransitionTime(BoardState.loading) + 10), () {
-      context.read<GameBloc>().add(const NewGame());
+      if (mounted) {
+        context.read<GameBloc>().add(const InitializeGame());
+      }
     });
   }
 

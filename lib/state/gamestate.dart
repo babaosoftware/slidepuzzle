@@ -18,9 +18,11 @@ class GameState extends Equatable {
     autoPlay = false;
     boardState = BoardState.loading;
     counter = 0;
+    initialized = false;
   }
 
-  GameState.copy(this.boardType, this.boardSize, this.hintStack, this.game, this.startGame, this.currentBoard, this.prevBoard, this.autoPlay, this.boardState, this.counter);
+  GameState.copy(this.boardType, this.boardSize, this.hintStack, this.game, this.startGame, this.currentBoard, this.prevBoard, this.autoPlay, this.boardState,
+      this.counter, this.initialized);
 
   GameState copyWith({
     BoardType? boardType,
@@ -33,9 +35,10 @@ class GameState extends Equatable {
     bool? autoPlay,
     BoardState? boardState,
     int? counter,
+    bool? initialized,
   }) {
     return GameState.copy(boardType ?? this.boardType, boardSize ?? this.boardSize, hintStack ?? this.hintStack, game ?? this.game, startGame ?? this.startGame,
-        currentBoard ?? this.currentBoard, prevBoard ?? this.prevBoard, autoPlay ?? this.autoPlay, boardState ?? this.boardState, counter ?? this.counter);
+        currentBoard ?? this.currentBoard, prevBoard ?? this.prevBoard, autoPlay ?? this.autoPlay, boardState ?? this.boardState, counter ?? this.counter, initialized ?? this.initialized);
   }
 
   final BoardType boardType;
@@ -48,6 +51,7 @@ class GameState extends Equatable {
   late final bool autoPlay;
   late final BoardState boardState;
   late final int counter;
+  late final bool initialized;
 
   static int stateTransitionTime(BoardState boardState) {
     switch (boardState) {
