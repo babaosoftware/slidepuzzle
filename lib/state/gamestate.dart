@@ -56,9 +56,9 @@ class GameState extends Equatable {
   static int stateTransitionTime(BoardState boardState) {
     switch (boardState) {
       case BoardState.loading:
-        return 2000;
-      case BoardState.start:
         return 1000;
+      case BoardState.start:
+        return 700;
       case BoardState.ongoing:
         return 300;
       case BoardState.end:

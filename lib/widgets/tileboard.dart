@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:provider/src/provider.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
