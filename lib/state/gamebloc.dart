@@ -106,7 +106,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     }
   }
 
-  void _gameHint() {
+  void _gameHint(bool fromAutoPlay) {
     Timer(const Duration(milliseconds: 400), () async {
       // final stopwatch = Stopwatch();
       // stopwatch.start();
@@ -119,21 +119,23 @@ class GameBloc extends Bloc<GameEvent, GameState> {
       //     add(GameHintReceived(hint.value));
       //   });
       // } else {
-      if (isClosed || !state.autoPlay) return;
+      if (isClosed || fromAutoPlay && !state.autoPlay) return;
       add(GameHintReceived(hint.value));
-      _gameHint();
+      if (fromAutoPlay) {
+        _gameHint(true);
+      }
       // }
     });
   }
 
   void _onGameHint(GameHint event, Emitter<GameState> emit) {
     emit(state.copyWith(boardState: BoardState.hint, prevBoard: Board.copy(state.currentBoard)));
-    _gameHint();
+    _gameHint(false);
   }
 
   void _onAutoPlay(AutoPlay event, Emitter<GameState> emit) {
     emit(state.copyWith(autoPlay: !state.autoPlay, boardState: BoardState.ongoing, prevBoard: Board.copy(state.currentBoard)));
-    _gameHint();
+    _gameHint(true);
     // emit(state.copyWith(
     //     game: Game.copy(state.startGame),
     //     boardState: BoardState.start,
@@ -146,9 +148,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     return compute(calculateMove, game);
   }
 
-  Hint calculateMove(Game game) {
-    return game.getBoardHint([]);
-  }
 
 // emit was called after an event handler completed normally.
 // This is usually due to an unawaited future in an event handler.
@@ -296,3 +295,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   //   ];
   // }
 }
+
+  Hint calculateMove(Game game) {
+    return game.getBoardHint([]);
+  }
