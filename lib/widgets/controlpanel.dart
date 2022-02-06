@@ -23,17 +23,11 @@ class _ControlPanelState extends State<ControlPanel> {
   @override
   Widget build(BuildContext context) {
     final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
-    final state = context.select((GameBloc bloc) => bloc.state);
 
-    return smallScreen
-        ? Padding(
-            padding: const EdgeInsets.only(top: 16.0),
-            child: SizedBox(width: TileSizes.tileSize * state.boardSize, child: buildTable()),
-          )
-        : Padding(
-            padding: const EdgeInsets.only(left: 16.0),
-            child: SizedBox(width: TileSizes.tileSize * state.boardSize, child: buildTable()),
-          );
+    return Padding(
+      padding: smallScreen ? const EdgeInsets.only(top: 16.0) : const EdgeInsets.only(left: 16.0),
+      child: ConstrainedBox(constraints: const BoxConstraints(maxWidth: 300), child: buildTable()),
+    );
   }
 
   Widget buildTable() {
@@ -58,7 +52,8 @@ class _ControlPanelState extends State<ControlPanel> {
           buildPanelButton("Back", !initialized || autoPlay || counter <= 0 ? null : () => context.read<GameBloc>().add(const GameBack())),
         ]),
         TableRow(children: [
-          buildPanelButton(autoPlay ? "Stop" : "Auto Play", !initialized || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const AutoPlay())),
+          buildPanelButton(
+              autoPlay ? "Stop" : "Auto Play", !initialized || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const AutoPlay())),
           Padding(
             padding: const EdgeInsets.only(left: 48.0, top: 8.0, bottom: 8.0, right: 8.0),
             child: Text('Steps: ${state.counter}', style: const TextStyle(color: PuzzleColors.textColor)),

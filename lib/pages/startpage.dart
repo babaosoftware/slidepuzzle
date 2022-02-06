@@ -89,30 +89,33 @@ class _StartPageState extends State<StartPage> {
   }
 
   Widget twoColumnTable() {
-    return Table(
-      columnWidths: const <int, TableColumnWidth>{
-        0: FlexColumnWidth(),
-        1: FlexColumnWidth(),
-      },
-      defaultVerticalAlignment: TableCellVerticalAlignment.middle,
-      children: [
-        TableRow(children: [
-          startCell("3x3 Horizontal", BoardType.basic, 3),
-          startCell("3x3 Reverse", BoardType.reverse, 3),
-        ]),
-        TableRow(children: [
-          startCell("3x3 Spiral", BoardType.spiral, 3),
-          startCell("3x3 Snake", BoardType.snake, 3),
-        ]),
-        TableRow(children: [
-          startCell("4x4 Horizontal", BoardType.basic, 4),
-          startCell("4x4 Reverse", BoardType.reverse, 4),
-        ]),
-        TableRow(children: [
-          startCell("4x4 Spiral", BoardType.spiral, 4),
-          startCell("4x4 Snake", BoardType.snake, 4),
-        ]),
-      ],
+    return Center(
+      child: Table(
+        // columnWidths: const <int, TableColumnWidth>{
+        //   0: IntrinsicColumnWidth(),
+        //   1: IntrinsicColumnWidth(),
+        // },
+        defaultColumnWidth: const FixedColumnWidth(300),
+        defaultVerticalAlignment: TableCellVerticalAlignment.middle,
+        children: [
+          TableRow(children: [
+            startCell("3x3 Horizontal", BoardType.basic, 3),
+            startCell("3x3 Reverse", BoardType.reverse, 3),
+          ]),
+          TableRow(children: [
+            startCell("3x3 Spiral", BoardType.spiral, 3),
+            startCell("3x3 Snake", BoardType.snake, 3),
+          ]),
+          TableRow(children: [
+            startCell("4x4 Horizontal", BoardType.basic, 4),
+            startCell("4x4 Reverse", BoardType.reverse, 4),
+          ]),
+          TableRow(children: [
+            startCell("4x4 Spiral", BoardType.spiral, 4),
+            startCell("4x4 Snake", BoardType.snake, 4),
+          ]),
+        ],
+      ),
     );
   }
 }
