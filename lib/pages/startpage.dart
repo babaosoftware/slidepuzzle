@@ -1,11 +1,11 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
+import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
 class StartPage extends StatefulWidget {
@@ -16,6 +16,7 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+
   @override
   Widget build(BuildContext context) {
     final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
@@ -25,9 +26,11 @@ class _StartPageState extends State<StartPage> {
         appBar: AppBar(
           title: const Text("Pick a game board"),
         ),
-        body: SingleChildScrollView(
-          child: smallScreen ? oneColumnTable() : twoColumnTable(),
-        ));
+        body: BlocProvider(
+            create: (context) => themeBloc,
+            child: SingleChildScrollView(
+              child: smallScreen ? oneColumnTable() : twoColumnTable(),
+            )));
   }
 
   Widget startCell(String title, BoardType boardType, int boardSize) {
