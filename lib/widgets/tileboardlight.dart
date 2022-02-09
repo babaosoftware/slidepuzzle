@@ -3,7 +3,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/models/board.dart';
-import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themestate.dart';
 import 'package:slidepuzzle/widgets/tile.dart';
@@ -30,28 +29,28 @@ class TileBoardLight extends StatelessWidget {
       child: Padding(
         padding: const EdgeInsets.all(1.0),
         child: SizedBox(
-          width: TileSizes.lightTileSize * board.size,
-          height: TileSizes.lightTileSize * board.size,
+          width: themeState.theme.lightTileSize * board.size,
+          height: themeState.theme.lightTileSize * board.size,
           child: Stack(
-            children: makeTiles(),
+            children: makeTiles(themeState),
           ),
         ),
       ),
     );});
   }
 
-  List<Widget> makeTiles() {
+  List<Widget> makeTiles(ThemeState themeState) {
     List<Widget> tiles = [];
     for (int i = 0; i < board.size; i++) {
       for (int j = 0; j < board.size; j++) {
-        tiles.add(makeTile(i, j));
+        tiles.add(makeTile(themeState, i, j));
       }
     }
     return tiles;
   }
 
-  Widget makeTile(int currenti, int currentj) {
+  Widget makeTile(ThemeState themeState, int currenti, int currentj) {
     Tile tile = Tile(board.board[currenti][currentj], board.board[currenti][currentj] == board.emptyCellValue, key: Key(board.board[currenti][currentj].toString()), light: true,);
-    return Positioned(left: TileSizes.lightTileSize * currentj, top: TileSizes.lightTileSize * currenti, child: tile);
+    return Positioned(left: themeState.theme.lightTileSize * currentj, top: themeState.theme.lightTileSize * currenti, child: tile);
   }
 }

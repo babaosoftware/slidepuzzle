@@ -2,8 +2,6 @@ import 'dart:async';
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slidepuzzle/colors/colors.dart';
-import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
 import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
@@ -62,10 +60,10 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
         child: Padding(
           padding: const EdgeInsets.all(3.0),
           child: SizedBox(
-            width: TileSizes.tileSize * state.currentBoard.size,
-            height: TileSizes.tileSize * state.currentBoard.size,
+            width: themeState.theme.tileSize * state.currentBoard.size,
+            height: themeState.theme.tileSize * state.currentBoard.size,
             child: Stack(
-              children: makeTiles(state),
+              children: makeTiles(state, themeState),
             ),
           ),
         ),
@@ -73,18 +71,18 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
     });
   }
 
-  List<Widget> makeTiles(GameState state) {
+  List<Widget> makeTiles(GameState state, ThemeState themeState) {
     List<Widget> tiles = [];
     for (int i = 0; i < state.currentBoard.size; i++) {
       for (int j = 0; j < state.currentBoard.size; j++) {
-        tiles.add(makeTile(state, i, j));
+        tiles.add(makeTile(state, themeState, i, j));
       }
     }
     return tiles;
   }
 
-  Widget makeTile(GameState state, int currenti, int currentj) {
-    Size parentSize = Size(TileSizes.tileSize * state.currentBoard.size, TileSizes.tileSize * state.currentBoard.size);
+  Widget makeTile(GameState state, ThemeState themeState, int currenti, int currentj) {
+    Size parentSize = Size(themeState.theme.tileSize * state.currentBoard.size, themeState.theme.tileSize * state.currentBoard.size);
     var board = state.currentBoard.board;
     var prevBoard = state.prevBoard.board;
     int previ = 0;
@@ -108,14 +106,14 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
     Tile tile = Tile(board[currenti][currentj], board[currenti][currentj] == state.currentBoard.emptyCellValue, key: Key(board[currenti][currentj].toString()));
 
     if (samePos) {
-      return Positioned(left: TileSizes.tileSize * currentj, top: TileSizes.tileSize * currenti, child: tile);
+      return Positioned(left: themeState.theme.tileSize * currentj, top: themeState.theme.tileSize * currenti, child: tile);
     } else {
       return PositionedTransition(
         rect: RelativeRectTween(
           begin:
-              RelativeRect.fromSize(Rect.fromLTWH(TileSizes.tileSize * prevj, TileSizes.tileSize * previ, TileSizes.tileSize, TileSizes.tileSize), parentSize),
+              RelativeRect.fromSize(Rect.fromLTWH(themeState.theme.tileSize * prevj, themeState.theme.tileSize * previ, themeState.theme.tileSize, themeState.theme.tileSize), parentSize),
           end: RelativeRect.fromSize(
-              Rect.fromLTWH(TileSizes.tileSize * currentj, TileSizes.tileSize * currenti, TileSizes.tileSize, TileSizes.tileSize), parentSize),
+              Rect.fromLTWH(themeState.theme.tileSize * currentj, themeState.theme.tileSize * currenti, themeState.theme.tileSize, themeState.theme.tileSize), parentSize),
         ).animate(CurvedAnimation(parent: _controller, curve: state.boardState == BoardState.start ? Curves.easeInOutQuart : Curves.linear)),
         child: tile,
       );

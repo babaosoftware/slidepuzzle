@@ -1,43 +1,41 @@
-import 'dart:ui';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/widgets.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
 
-class DefaultTheme extends PuzzleTheme {
+class WoodTheme extends PuzzleTheme {
   /// {@macro simple_theme}
-  const DefaultTheme() : super();
+  const WoodTheme() : super();
 
   @override
-  String get name => 'Default';
+  String get name => 'BlackWhite';
 
   @override
-  Color get evenTileBackColor => PuzzleColors.cellEvenBackColor;
+  Color get evenTileBackColor => PuzzleColors.transparent;
   @override
-  Color get oddTileBackColor => PuzzleColors.cellOddBackColor;
+  Color get oddTileBackColor => PuzzleColors.transparent;
 
   @override
-  Color get evenTileBorderColor => PuzzleColors.cellBorderColorOdd;
+  Color get evenTileBorderColor => PuzzleColors.transparent;
   @override
-  Color get oddTileBorderColor => PuzzleColors.cellBorderColorEven;
+  Color get oddTileBorderColor => PuzzleColors.transparent;
 
   @override
-  Color get evenTileTextColor => PuzzleColors.cellEvenTextColor;
+  Color get evenTileTextColor => PuzzleColors.white;
   @override
-  Color get oddTileTextColor => PuzzleColors.cellOddTextColor;
+  Color get oddTileTextColor => PuzzleColors.white;
 
   @override
-  Color get boardBackColor => PuzzleColors.boardBackColor;
+  Color get boardBackColor => PuzzleColors.black;
   @override
-  Color get boardBorderColor => PuzzleColors.boardBorderColor;
+  Color get boardBorderColor => PuzzleColors.transparent;
 
   @override
-  DecorationImage? tileImageBackground(int value) => null;
+  DecorationImage? tileImageBackground(int value) => const DecorationImage(image: AssetImage("images/woodtile.png"), fit: BoxFit.cover);
 
   @override
   double get tileSize => 70;
   @override
-  double get fontSize => 35;
+  double get fontSize => 25;
   @override
   double get lightTileSize => 50;
   @override
@@ -64,3 +62,5 @@ class DefaultTheme extends PuzzleTheme {
         tileValue,
       ];
 }
+
+

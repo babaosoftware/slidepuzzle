@@ -1,6 +1,7 @@
 import 'dart:ui';
 
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 abstract class PuzzleTheme extends Equatable {
   const PuzzleTheme();
@@ -19,6 +20,13 @@ abstract class PuzzleTheme extends Equatable {
 
   Color get boardBackColor;
   Color get boardBorderColor;
+
+  DecorationImage? tileImageBackground(int value);
+
+  double get tileSize;
+  double get fontSize;
+  double get lightTileSize;
+  double get lightFontSize;
 
   String get tileClickSound;
 

@@ -5,6 +5,7 @@ import 'package:slidepuzzle/theme/blackwhite.dart';
 import 'package:slidepuzzle/theme/default.dart';
 import 'package:slidepuzzle/theme/letters.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
+import 'package:slidepuzzle/theme/wood.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ThemeBloc({required List<PuzzleTheme> initialThemes})
@@ -34,5 +35,5 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   // }
 }
 
-final themeBloc = ThemeBloc(initialThemes: [const BlackWhiteTheme(), const DefaultTheme(), const LettersTheme()]);
+final themeBloc = ThemeBloc(initialThemes: [const WoodTheme(), const BlackWhiteTheme(), const DefaultTheme(), const LettersTheme()]);
 

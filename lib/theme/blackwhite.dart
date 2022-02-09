@@ -1,5 +1,6 @@
 import 'dart:ui';
 
+import 'package:flutter/widgets.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
 
@@ -29,6 +30,18 @@ class BlackWhiteTheme extends PuzzleTheme {
   Color get boardBackColor => PuzzleColors.black;
   @override
   Color get boardBorderColor => PuzzleColors.transparent;
+
+  @override
+  DecorationImage? tileImageBackground(int value) => null;
+
+  @override
+  double get tileSize => 70;
+  @override
+  double get fontSize => 35;
+  @override
+  double get lightTileSize => 50;
+  @override
+  double get lightFontSize => 15;
 
   @override
   String get tileClickSound => 'audio/tilemove.wav';

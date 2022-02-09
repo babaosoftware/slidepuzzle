@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:audioplayers/audioplayers.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
-import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
 import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
@@ -22,12 +21,13 @@ class Tile extends StatelessWidget {
     return BlocBuilder<ThemeBloc, ThemeState>(
       builder: (context, state) {
         return SizedBox(
-          width: light ? TileSizes.lightTileSize : TileSizes.tileSize,
-          height: light ? TileSizes.lightTileSize : TileSizes.tileSize,
+          width: light ? state.theme.lightTileSize : state.theme.tileSize,
+          height: light ? state.theme.lightTileSize : state.theme.tileSize,
           child: Padding(
             padding: const EdgeInsets.all(2.0),
             child: Container(
               decoration: BoxDecoration(
+                image: isEmpty ? null : state.theme.tileImageBackground(value),
                 color: isEmpty ? PuzzleColors.transparent : (value.isEven ? state.theme.evenTileBackColor : state.theme.oddTileBackColor),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(12.0),
@@ -47,7 +47,7 @@ class Tile extends StatelessWidget {
                   disabledMouseCursor: light ? SystemMouseCursors.click : SystemMouseCursors.basic,
                   enabledMouseCursor: light ? SystemMouseCursors.click : SystemMouseCursors.click,
                   textStyle: PuzzleTextStyle.headline2.copyWith(
-                    fontSize: light ? TileSizes.lightFontSize : TileSizes.fontSize,
+                    fontSize: light ? state.theme.lightFontSize : state.theme.fontSize,
                   ),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
