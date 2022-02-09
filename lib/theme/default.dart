@@ -26,6 +26,11 @@ class DefaultTheme extends PuzzleTheme {
   Color get oddTileTextColor => PuzzleColors.cellOddTextColor;
 
   @override
+  Color get boardBackColor => PuzzleColors.boardBackColor;
+  @override
+  Color get boardBorderColor => PuzzleColors.boardBorderColor;
+
+  @override
   String get tileClickSound => 'audio/tilemove.wav';
 
   @override

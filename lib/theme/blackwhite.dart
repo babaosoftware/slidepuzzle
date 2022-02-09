@@ -16,14 +16,19 @@ class BlackWhiteTheme extends PuzzleTheme {
   Color get oddTileBackColor => PuzzleColors.white;
 
   @override
-  Color get evenTileBorderColor => PuzzleColors.black;
+  Color get evenTileBorderColor => PuzzleColors.transparent;
   @override
-  Color get oddTileBorderColor => PuzzleColors.black;
+  Color get oddTileBorderColor => PuzzleColors.transparent;
 
   @override
   Color get evenTileTextColor => PuzzleColors.black;
   @override
   Color get oddTileTextColor => PuzzleColors.black;
+
+  @override
+  Color get boardBackColor => PuzzleColors.black;
+  @override
+  Color get boardBorderColor => PuzzleColors.transparent;
 
   @override
   String get tileClickSound => 'audio/tilemove.wav';

@@ -7,6 +7,8 @@ import 'package:slidepuzzle/sizes/tilesize.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
 import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
+import 'package:slidepuzzle/state/themebloc.dart';
+import 'package:slidepuzzle/state/themestate.dart';
 import 'package:slidepuzzle/widgets/tile.dart';
 
 class TileBoard extends StatefulWidget {
@@ -44,17 +46,17 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
         vsync: this,
       );
       _controller.forward();
-      return Container(
-        decoration: const BoxDecoration(
-          color: PuzzleColors.boardBackColor,
-          borderRadius: BorderRadius.all(
+      return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {return Container(
+        decoration: BoxDecoration(
+          color: themeState.theme.boardBackColor,
+          borderRadius: const BorderRadius.all(
             Radius.circular(12.0),
           ),
           border: Border(
-            top: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-            left: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-            right: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
-            bottom: BorderSide(width: 2.0, color: PuzzleColors.boardBorderColor),
+            top: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            left: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            right: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            bottom: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
           ),
         ),
         child: Padding(
@@ -67,7 +69,7 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
             ),
           ),
         ),
-      );
+      );});
     });
   }
 

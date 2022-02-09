@@ -3,7 +3,6 @@ import 'dart:ui';
 import 'package:equatable/equatable.dart';
 
 abstract class PuzzleTheme extends Equatable {
-  /// {@macro puzzle_theme}
   const PuzzleTheme();
 
   /// The display name of this theme.
@@ -17,6 +16,9 @@ abstract class PuzzleTheme extends Equatable {
 
   Color get evenTileTextColor;
   Color get oddTileTextColor;
+
+  Color get boardBackColor;
+  Color get boardBorderColor;
 
   String get tileClickSound;
 

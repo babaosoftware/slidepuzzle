@@ -1,8 +1,11 @@
 
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/sizes/tilesize.dart';
+import 'package:slidepuzzle/state/themebloc.dart';
+import 'package:slidepuzzle/state/themestate.dart';
 import 'package:slidepuzzle/widgets/tile.dart';
 
 class TileBoardLight extends StatelessWidget {
@@ -11,7 +14,7 @@ class TileBoardLight extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {return Container(
       decoration: const BoxDecoration(
         color: PuzzleColors.boardBackColor,
         borderRadius: BorderRadius.all(
@@ -34,7 +37,7 @@ class TileBoardLight extends StatelessWidget {
           ),
         ),
       ),
-    );
+    );});
   }
 
   List<Widget> makeTiles() {
