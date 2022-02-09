@@ -10,7 +10,7 @@ import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
 
 class GameBloc extends Bloc<GameEvent, GameState> {
-  GameBloc(this.boardType, this.boardSize) : super(GameState(boardType, boardSize)) {
+  GameBloc(this.boardType, this.boardSize, {bool isArena = false}) : super(GameState(boardType, boardSize, isArena: isArena)) {
     on<InitializeGame>(_onInitializeGame);
     on<NewGame>(_onNewGame);
     on<TileClick>(_onTileClick);
@@ -27,6 +27,56 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   void _onInitializeGame(InitializeGame event, Emitter<GameState> emit) {
     if (!state.initialized) {
       Game newGame = Game(boardType, boardSize);
+      if (state.isArena) {
+        Game newGameComputer = Game.copy(newGame);
+        emit(state.copyWith(
+          game: newGame,
+          gameComputer: newGameComputer,
+          startGame: Game.copy(newGame),
+          boardState: BoardState.start,
+          hintStack: [],
+          hintStackComputer: [],
+          prevBoard: Board.copy(state.game.getGameBoard()),
+          prevBoardComputer: Board.copy(state.game.getGameBoard()),
+          currentBoard: Board.copy(newGame.getGameBoard()),
+          currentBoardComputer: Board.copy(newGameComputer.getGameBoard()),
+          counter: 0,
+          initialized: true,
+        ));
+      } else {
+        emit(state.copyWith(
+          game: newGame,
+          startGame: Game.copy(newGame),
+          boardState: BoardState.start,
+          hintStack: [],
+          prevBoard: Board.copy(state.game.getGameBoard()),
+          currentBoard: Board.copy(newGame.getGameBoard()),
+          counter: 0,
+          initialized: true,
+        ));
+      }
+    }
+  }
+
+  void _onNewGame(NewGame event, Emitter<GameState> emit) {
+    Game newGame = Game(boardType, boardSize);
+    if (state.isArena) {
+      Game newGameComputer = Game.copy(newGame);
+      emit(state.copyWith(
+        game: newGame,
+        gameComputer: newGameComputer,
+        startGame: Game.copy(newGame),
+        boardState: BoardState.start,
+        hintStack: [],
+        hintStackComputer: [],
+        prevBoard: Board.copy(state.game.getGameBoard()),
+        prevBoardComputer: Board.copy(state.game.getGameBoard()),
+        currentBoard: Board.copy(newGame.getGameBoard()),
+        currentBoardComputer: Board.copy(newGameComputer.getGameBoard()),
+        counter: 0,
+        initialized: true,
+      ));
+    } else {
       emit(state.copyWith(
         game: newGame,
         startGame: Game.copy(newGame),
@@ -35,22 +85,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         prevBoard: Board.copy(state.game.getGameBoard()),
         currentBoard: Board.copy(newGame.getGameBoard()),
         counter: 0,
-        initialized: true,
       ));
     }
-  }
-
-  void _onNewGame(NewGame event, Emitter<GameState> emit) {
-    Game newGame = Game(boardType, boardSize);
-    emit(state.copyWith(
-      game: newGame,
-      startGame: Game.copy(newGame),
-      boardState: BoardState.start,
-      hintStack: [],
-      prevBoard: Board.copy(state.game.getGameBoard()),
-      currentBoard: Board.copy(newGame.getGameBoard()),
-      counter: 0,
-    ));
   }
 
   void _onTileClick(TileClick event, Emitter<GameState> emit) {
@@ -60,9 +96,11 @@ class GameBloc extends Bloc<GameEvent, GameState> {
         boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
         hintStack: [],
         prevBoard: Board.copy(state.currentBoard),
+        prevBoardComputer: Board.copy(state.currentBoardComputer),
         currentBoard: Board.copy(state.game.getGameBoard()),
         counter: state.counter + 1,
       ));
+      if (state.isArena) _gameHint(false);
     }
   }
 
@@ -92,33 +130,35 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onGameHintReceived(GameHintReceived event, Emitter<GameState> emit) {
-    if (state.game.moveValue(event.value)) {
-      bool gameSolved = state.game.checkGameSolved();
-      emit(state.copyWith(
-        game: Game.copy(state.game),
-        autoPlay: gameSolved ? false : state.autoPlay,
-        boardState: gameSolved ? BoardState.end : BoardState.ongoing,
-        hintStack: [],
-        prevBoard: Board.copy(state.currentBoard),
-        currentBoard: Board.copy(state.game.getGameBoard()),
-        counter: state.counter + 1,
-      ));
+    if (state.isArena) {
+      if (state.gameComputer.moveValue(event.value)) {
+        bool gameSolved = state.game.checkGameSolved() || state.gameComputer.checkGameSolved();
+        emit(state.copyWith(
+          boardState: gameSolved ? BoardState.end : BoardState.ongoing,
+          prevBoard: Board.copy(state.currentBoard),
+          prevBoardComputer: Board.copy(state.currentBoardComputer),
+          currentBoardComputer: Board.copy(state.gameComputer.getGameBoard()),
+        ));
+      }
+    } else {
+      if (state.game.moveValue(event.value)) {
+        bool gameSolved = state.game.checkGameSolved();
+        state.hintStack.add(Board.copy(state.game.getGameBoard()));
+        emit(state.copyWith(
+          game: Game.copy(state.game),
+          autoPlay: gameSolved ? false : state.autoPlay,
+          boardState: gameSolved ? BoardState.end : BoardState.ongoing,
+          prevBoard: Board.copy(state.currentBoard),
+          currentBoard: Board.copy(state.game.getGameBoard()),
+          counter: state.counter + 1,
+        ));
+      }
     }
   }
 
   void _gameHint(bool fromAutoPlay) {
     Timer(const Duration(milliseconds: 400), () async {
-      // final stopwatch = Stopwatch();
-      // stopwatch.start();
-      Hint hint = await calculateNextMove(Game.copy(state.game), state.hintStack);
-      // int elapsed = stopwatch.elapsedMilliseconds;
-      // stopwatch.stop();
-      // int transitionTime = GameState.stateTransitionTime(BoardState.hint);
-      // if (elapsed < transitionTime) {
-      //   Timer(Duration(milliseconds: transitionTime - elapsed), () {
-      //     add(GameHintReceived(hint.value));
-      //   });
-      // } else {
+      Hint hint = await calculateNextMove(Game.copy(state.isArena ? state.gameComputer : state.game), state.hintStack);
       if (isClosed || fromAutoPlay && !state.autoPlay) return;
       add(GameHintReceived(hint.value));
       if (fromAutoPlay) {
@@ -145,9 +185,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   Future<Hint> calculateNextMove(Game game, List<Board> hintStack) {
-    return compute(calculateMove, game);
+    return compute(calculateMove, CalculateMoveParam(game, hintStack));
   }
-
 
 // emit was called after an event handler completed normally.
 // This is usually due to an unawaited future in an event handler.
@@ -296,6 +335,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   // }
 }
 
-  Hint calculateMove(Game game) {
-    return game.getBoardHint([]);
-  }
+class CalculateMoveParam {
+  final Game game;
+  final List<Board> hintStack;
+
+  CalculateMoveParam(this.game, this.hintStack);
+}
+
+Hint calculateMove(CalculateMoveParam params) {
+  return params.game.getBoardHint(params.hintStack);
+}

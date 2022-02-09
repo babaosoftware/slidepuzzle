@@ -4,6 +4,7 @@ import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
+import 'package:slidepuzzle/pages/gamearena.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
@@ -48,7 +49,7 @@ class _StartPageState extends State<StartPage> {
           ),
           InkWell(
               onTap: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => GamePage(title: title, boardType: boardType, boardSize: boardSize)));
+                Navigator.push(context, MaterialPageRoute(builder: (context) => GameArena(title: title, boardType: boardType, boardSize: boardSize)));
               },
               child: TileBoardLight(Board(boardSize, createTargetBoard(boardSize, boardType)))),
         ],
