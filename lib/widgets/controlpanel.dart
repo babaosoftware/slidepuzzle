@@ -5,6 +5,8 @@ import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
 import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
+import 'package:slidepuzzle/state/themebloc.dart';
+import 'package:slidepuzzle/state/themestate.dart';
 
 class ControlPanel extends StatefulWidget {
   const ControlPanel({Key? key}) : super(key: key);
@@ -31,6 +33,7 @@ class _ControlPanelState extends State<ControlPanel> {
 
   Widget buildTable() {
     final state = context.select((GameBloc bloc) => bloc.state);
+    final themeState = context.select((ThemeBloc bloc) => bloc.state);
     final counter = state.counter;
     final gameEnd = state.boardState == BoardState.end;
     final autoPlay = state.autoPlay;
@@ -55,7 +58,7 @@ class _ControlPanelState extends State<ControlPanel> {
               autoPlay ? "Stop" : "Auto Play", !initialized || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const AutoPlay())),
           Padding(
             padding: const EdgeInsets.only(left: 48.0, top: 8.0, bottom: 8.0, right: 8.0),
-            child: Text('Steps: ${state.counter}', style: const TextStyle(color: PuzzleColors.textColor)),
+            child: Text('Steps: ${state.counter}', style: TextStyle(color: themeState.theme.controlLabelColor)),
           ),
         ]),
       ],
@@ -63,9 +66,15 @@ class _ControlPanelState extends State<ControlPanel> {
   }
 
   Widget buildPanelButton(String text, void Function()? onPressed) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
-      child: ElevatedButton(style: ElevatedButton.styleFrom(disabledMouseCursor: SystemMouseCursors.basic), onPressed: onPressed, child: Text(text)),
-    );
+    final themeState = context.select((ThemeBloc bloc) => bloc.state);
+      return Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              primary: themeState.theme.controlButtonColor,
+                onSurface: themeState.theme.controlButtonSurfaceColor, disabledMouseCursor: SystemMouseCursors.basic),
+            onPressed: onPressed,
+            child: Text(text)),
+      );
   }
 }

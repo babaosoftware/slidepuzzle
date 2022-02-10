@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
@@ -25,9 +26,22 @@ class WoodTheme extends PuzzleTheme {
   Color get oddTileTextColor => PuzzleColors.white;
 
   @override
-  Color get boardBackColor => PuzzleColors.black;
+  Color get boardBackColor => const Color(0xC0FFA726);
   @override
-  Color get boardBorderColor => PuzzleColors.transparent;
+  Color get boardBorderColor => const Color(0xFFFF9100);
+
+  @override
+  Color get pageBackground => Colors.grey.shade800;
+
+  @override
+  Color get controlButtonColor => const Color(0xFFFF9800);
+  @override
+  Color get controlButtonSurfaceColor => Colors.orange;
+  @override
+  Color get controlLabelColor => Colors.orange;
+
+  @override
+  double get tileRadius => 12.0;
 
   @override
   DecorationImage? tileImageBackground(int value) => const DecorationImage(image: AssetImage("images/woodtile.png"), fit: BoxFit.cover);
@@ -62,5 +76,3 @@ class WoodTheme extends PuzzleTheme {
         tileValue,
       ];
 }
-
-

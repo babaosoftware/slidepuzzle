@@ -14,17 +14,17 @@ class TileBoardLight extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<ThemeBloc, ThemeState>(builder: (context, themeState) {return Container(
-      decoration: const BoxDecoration(
-        color: PuzzleColors.boardBackColor,
-        borderRadius: BorderRadius.all(
+      decoration: BoxDecoration(
+        color: themeState.theme.boardBackColor,
+        borderRadius: const BorderRadius.all(
           Radius.circular(12.0),
         ),
-        border: Border(
-          top: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
-          left: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
-          right: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
-          bottom: BorderSide(width: 1.0, color: PuzzleColors.boardBorderColor),
-        ),
+          border: Border(
+            top: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            left: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            right: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            bottom: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+          ),
       ),
       child: Padding(
         padding: const EdgeInsets.all(1.0),

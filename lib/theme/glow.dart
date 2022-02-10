@@ -1,21 +1,19 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
 
-class BlackWhiteTheme extends PuzzleTheme {
+class GlowTheme extends PuzzleTheme {
   /// {@macro simple_theme}
-  const BlackWhiteTheme() : super();
+  const GlowTheme() : super();
 
   @override
   String get name => 'BlackWhite';
 
   @override
-  Color get evenTileBackColor => PuzzleColors.white;
+  Color get evenTileBackColor => PuzzleColors.transparent;
   @override
-  Color get oddTileBackColor => PuzzleColors.white;
+  Color get oddTileBackColor => PuzzleColors.transparent;
 
   @override
   Color get evenTileBorderColor => PuzzleColors.transparent;
@@ -23,9 +21,9 @@ class BlackWhiteTheme extends PuzzleTheme {
   Color get oddTileBorderColor => PuzzleColors.transparent;
 
   @override
-  Color get evenTileTextColor => PuzzleColors.black;
+  Color get evenTileTextColor => PuzzleColors.orange;
   @override
-  Color get oddTileTextColor => PuzzleColors.black;
+  Color get oddTileTextColor => PuzzleColors.blue;
 
   @override
   Color get boardBackColor => PuzzleColors.black;
@@ -36,20 +34,24 @@ class BlackWhiteTheme extends PuzzleTheme {
   Color get pageBackground => PuzzleColors.black;
 
   @override
-  Color get controlButtonColor => Colors.grey.shade900;
+  Color get controlButtonColor => const Color(0xFFFF9800);
   @override
-  Color get controlButtonSurfaceColor => Colors.grey;
+  Color get controlButtonSurfaceColor => Colors.orange;
+  @override
+  Color get controlLabelColor => Colors.orange;
+
+
 
   @override
-  double get tileRadius => 12.0;
+  double get tileRadius => 16.0;
 
   @override
-  DecorationImage? tileImageBackground(int value) => null;
+  DecorationImage? tileImageBackground(int value) => DecorationImage(image: AssetImage(value.isEven ? "images/gloworange.png" : "images/glowblue.png"), fit: BoxFit.cover);
 
   @override
   double get tileSize => 70;
   @override
-  double get fontSize => 35;
+  double get fontSize => 25;
   @override
   double get lightTileSize => 50;
   @override
@@ -76,3 +78,5 @@ class BlackWhiteTheme extends PuzzleTheme {
         tileValue,
       ];
 }
+
+

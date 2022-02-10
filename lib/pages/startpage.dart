@@ -6,6 +6,7 @@ import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
+import 'package:slidepuzzle/state/themeevent.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
 class StartPage extends StatefulWidget {
@@ -16,21 +17,26 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
+  String currentTheme = "Default";
 
   @override
   Widget build(BuildContext context) {
     final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
 
-    return Scaffold(
-        backgroundColor: PuzzleColors.gameBack,
-        appBar: AppBar(
-          title: const Text("Pick a game board"),
-        ),
-        body: BlocProvider(
-            create: (context) => themeBloc,
-            child: SingleChildScrollView(
+    return BlocProvider.value(
+      value: themeBloc,
+      child: Scaffold(
+          backgroundColor: themeBloc.state.theme.pageBackground,
+          appBar: AppBar(
+            title: const Text("Pick a game board"),
+          ),
+          body: Stack(children: [
+            SingleChildScrollView(
               child: smallScreen ? oneColumnTable() : twoColumnTable(),
-            )));
+            ),
+            Positioned(top: 10, right: 10, child: themButton()),
+          ])),
+    );
   }
 
   Widget startCell(String title, BoardType boardType, int boardSize) {
@@ -119,6 +125,49 @@ class _StartPageState extends State<StartPage> {
           ]),
         ],
       ),
+    );
+  }
+
+  Widget themButton() {
+    return DropdownButton<String>(
+      value: currentTheme,
+      icon: const Icon(Icons.arrow_downward),
+      elevation: 16,
+      style: const TextStyle(color: Colors.deepPurple),
+      underline: Container(
+        height: 2,
+        color: Colors.deepPurpleAccent,
+      ),
+      onChanged: (String? newValue) {
+        setState(() {
+          currentTheme = newValue!;
+        });
+        var index = 0;
+        switch (newValue) {
+          case 'Default':
+            index = 0;
+            break;
+          case 'Orange':
+            index = 1;
+            break;
+          case 'Glow':
+            index = 2;
+            break;
+          case 'Black/White':
+            index = 3;
+            break;
+          case 'Letters':
+            index = 4;
+            break;
+        }
+        themeBloc.add(ThemeChanged(themeIndex: index));
+      },
+      items: <String>['Default', 'Orange', 'Glow', 'Black/White', 'Letters'].map<DropdownMenuItem<String>>((String value) {
+        return DropdownMenuItem<String>(
+          value: value,
+          child: Text(value),
+        );
+      }).toList(),
     );
   }
 }

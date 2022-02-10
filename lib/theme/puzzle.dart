@@ -21,6 +21,14 @@ abstract class PuzzleTheme extends Equatable {
   Color get boardBackColor;
   Color get boardBorderColor;
 
+  Color get pageBackground;
+
+  Color get controlButtonColor => Colors.blue;
+  Color get controlButtonSurfaceColor => Colors.black;
+  Color get controlLabelColor => Colors.white;
+
+  double get tileRadius;
+
   DecorationImage? tileImageBackground(int value);
 
   double get tileSize;

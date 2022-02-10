@@ -32,6 +32,12 @@ class DefaultTheme extends PuzzleTheme {
   Color get boardBorderColor => PuzzleColors.boardBorderColor;
 
   @override
+  Color get pageBackground => PuzzleColors.gameBack;
+
+  @override
+  double get tileRadius => 12.0;
+
+  @override
   DecorationImage? tileImageBackground(int value) => null;
 
   @override

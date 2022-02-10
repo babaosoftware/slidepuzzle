@@ -29,8 +29,8 @@ class Tile extends StatelessWidget {
               decoration: BoxDecoration(
                 image: isEmpty ? null : state.theme.tileImageBackground(value),
                 color: isEmpty ? PuzzleColors.transparent : (value.isEven ? state.theme.evenTileBackColor : state.theme.oddTileBackColor),
-                borderRadius: const BorderRadius.all(
-                  Radius.circular(12.0),
+                borderRadius: BorderRadius.all(
+                  Radius.circular(state.theme.tileRadius),
                 ),
                 border: isEmpty
                     ? const Border()
@@ -43,11 +43,12 @@ class Tile extends StatelessWidget {
               ),
               child: TextButton(
                 style: TextButton.styleFrom(
-                  primary: PuzzleColors.white,
+                  primary: const Color(0x10FFFF00),
                   disabledMouseCursor: light ? SystemMouseCursors.click : SystemMouseCursors.basic,
                   enabledMouseCursor: light ? SystemMouseCursors.click : SystemMouseCursors.click,
                   textStyle: PuzzleTextStyle.headline2.copyWith(
                     fontSize: light ? state.theme.lightFontSize : state.theme.fontSize,
+                    // color: const Color(0x10FF00FF),
                   ),
                   shape: const RoundedRectangleBorder(
                     borderRadius: BorderRadius.all(
@@ -55,7 +56,7 @@ class Tile extends StatelessWidget {
                     ),
                   ),
                 ).copyWith(
-                  foregroundColor: MaterialStateProperty.all(value.isEven ? state.theme.evenTileTextColor : state.theme.oddTileTextColor),
+                  // foregroundColor: MaterialStateProperty.all(value.isEven ? state.theme.evenTileTextColor : state.theme.oddTileTextColor),
                   backgroundColor: MaterialStateProperty.all(
                       isEmpty ? PuzzleColors.transparent : (value.isEven ? state.theme.evenTileBackColor : state.theme.oddTileBackColor)),
                 ),
@@ -65,7 +66,7 @@ class Tile extends StatelessWidget {
                         player.play(state.theme.tileClickSound);
                         context.read<GameBloc>().add(TileClick(value));
                       },
-                child: Text(isEmpty ? '' : state.theme.tileValue(value)),
+                child: Text(isEmpty ? '' : state.theme.tileValue(value), style: TextStyle(color: value.isEven ? state.theme.evenTileTextColor : state.theme.oddTileTextColor)),
               ),
             ),
           ),

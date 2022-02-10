@@ -96,14 +96,14 @@ class _GamePageState extends State<GamePage> {
     final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
 
     return Scaffold(
-        backgroundColor: PuzzleColors.gameBack,
+        backgroundColor: themeBloc.state.theme.pageBackground,
         appBar: AppBar(
           title: Text(widget.title),
         ),
         body: MultiBlocProvider(
           providers: [
             BlocProvider(create: (context) => gameBloc),
-            BlocProvider(create: (context) => themeBloc),
+            BlocProvider.value(value: themeBloc),
           ],
           child: Center(
             child: smallScreen
