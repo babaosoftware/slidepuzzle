@@ -9,14 +9,9 @@ abstract class PuzzleTheme extends Equatable {
   /// The display name of this theme.
   String get name;
 
-  Color get evenTileBackColor;
-  Color get oddTileBackColor;
-
-  Color get evenTileBorderColor;
-  Color get oddTileBorderColor;
-
-  Color get evenTileTextColor;
-  Color get oddTileTextColor;
+  Color tileBackColor(int value);
+  Color tileBorderColor(int value);
+  Color tileTextColor(int value);
 
   Color get boardBackColor;
   Color get boardBorderColor;

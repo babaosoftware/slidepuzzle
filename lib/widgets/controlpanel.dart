@@ -16,10 +16,6 @@ class ControlPanel extends StatefulWidget {
 }
 
 class _ControlPanelState extends State<ControlPanel> {
-  @override
-  void initState() {
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +32,7 @@ class _ControlPanelState extends State<ControlPanel> {
     final themeState = context.select((ThemeBloc bloc) => bloc.state);
     final counter = state.counter;
     final gameEnd = state.boardState == BoardState.end;
+    final isHint = state.boardState == BoardState.hint;
     final autoPlay = state.autoPlay;
     final initialized = state.initialized;
     return Table(
@@ -46,11 +43,18 @@ class _ControlPanelState extends State<ControlPanel> {
       defaultVerticalAlignment: TableCellVerticalAlignment.middle,
       children: [
         TableRow(children: [
+          Padding(
+            padding: const EdgeInsets.only(left: 24.0, top: 8.0, bottom: 8.0, right: 8.0),
+            child: Text(gameEnd? 'Game over!' : '', style: TextStyle(color: themeState.theme.controlLabelColor, fontSize: 20)),
+          ),
+          Container(),
+        ]),
+        TableRow(children: [
           buildPanelButton("New Game", !initialized || autoPlay ? null : () => context.read<GameBloc>().add(const NewGame())),
           buildPanelButton("Restart", !initialized || autoPlay || counter <= 0 ? null : () => context.read<GameBloc>().add(const RestartGame())),
         ]),
         TableRow(children: [
-          buildPanelButton("Hint", !initialized || autoPlay || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const GameHint())),
+          buildPanelButton("Hint", !initialized || autoPlay || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const GameHint()), showSpinner: isHint),
           buildPanelButton("Back", !initialized || autoPlay || counter <= 0 ? null : () => context.read<GameBloc>().add(const GameBack())),
         ]),
         TableRow(children: [
@@ -65,7 +69,7 @@ class _ControlPanelState extends State<ControlPanel> {
     );
   }
 
-  Widget buildPanelButton(String text, void Function()? onPressed) {
+  Widget buildPanelButton(String text, void Function()? onPressed, {showSpinner = false}) {
     final themeState = context.select((ThemeBloc bloc) => bloc.state);
       return Padding(
         padding: const EdgeInsets.all(8.0),
@@ -74,7 +78,7 @@ class _ControlPanelState extends State<ControlPanel> {
               primary: themeState.theme.controlButtonColor,
                 onSurface: themeState.theme.controlButtonSurfaceColor, disabledMouseCursor: SystemMouseCursors.basic),
             onPressed: onPressed,
-            child: Text(text)),
+            child: showSpinner ? const SizedBox(width:16, height: 16, child: CircularProgressIndicator(color: Colors.white)) : Text(text)),
       );
   }
 }

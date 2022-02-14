@@ -28,17 +28,17 @@ class Tile extends StatelessWidget {
             child: Container(
               decoration: BoxDecoration(
                 image: isEmpty ? null : state.theme.tileImageBackground(value),
-                color: isEmpty ? PuzzleColors.transparent : (value.isEven ? state.theme.evenTileBackColor : state.theme.oddTileBackColor),
+                color: isEmpty ? PuzzleColors.transparent : state.theme.tileBackColor(value),
                 borderRadius: BorderRadius.all(
                   Radius.circular(state.theme.tileRadius),
                 ),
                 border: isEmpty
                     ? const Border()
                     : Border(
-                        top: BorderSide(width: 2.0, color: state.theme.oddTileBorderColor),
-                        left: BorderSide(width: 2.0, color: state.theme.oddTileBorderColor),
-                        right: BorderSide(width: 2.0, color: state.theme.oddTileBorderColor),
-                        bottom: BorderSide(width: 2.0, color: state.theme.oddTileBorderColor),
+                        top: BorderSide(width: 2.0, color: state.theme.tileBorderColor(value)),
+                        left: BorderSide(width: 2.0, color: state.theme.tileBorderColor(value)),
+                        right: BorderSide(width: 2.0, color: state.theme.tileBorderColor(value)),
+                        bottom: BorderSide(width: 2.0, color: state.theme.tileBorderColor(value)),
                       ),
               ),
               child: TextButton(
@@ -56,9 +56,9 @@ class Tile extends StatelessWidget {
                     ),
                   ),
                 ).copyWith(
-                  // foregroundColor: MaterialStateProperty.all(value.isEven ? state.theme.evenTileTextColor : state.theme.oddTileTextColor),
+                  // foregroundColor: MaterialStateProperty.all(state.theme.tileTextColor(value)),
                   backgroundColor: MaterialStateProperty.all(
-                      isEmpty ? PuzzleColors.transparent : (value.isEven ? state.theme.evenTileBackColor : state.theme.oddTileBackColor)),
+                      isEmpty ? PuzzleColors.transparent : state.theme.tileBackColor(value)),
                 ),
                 onPressed: light || isEmpty
                     ? null
@@ -66,7 +66,7 @@ class Tile extends StatelessWidget {
                         player.play(state.theme.tileClickSound);
                         context.read<GameBloc>().add(TileClick(value));
                       },
-                child: Text(isEmpty ? '' : state.theme.tileValue(value), style: TextStyle(color: value.isEven ? state.theme.evenTileTextColor : state.theme.oddTileTextColor)),
+                child: Text(isEmpty ? '' : state.theme.tileValue(value), style: TextStyle(color: state.theme.tileTextColor(value))),
               ),
             ),
           ),

@@ -8,22 +8,14 @@ class GlowTheme extends PuzzleTheme {
   const GlowTheme() : super();
 
   @override
-  String get name => 'BlackWhite';
+  String get name => 'Glow';
 
   @override
-  Color get evenTileBackColor => PuzzleColors.transparent;
+  Color tileBackColor(int value) => PuzzleColors.transparent;
   @override
-  Color get oddTileBackColor => PuzzleColors.transparent;
-
+  Color tileBorderColor(int value) => PuzzleColors.transparent;
   @override
-  Color get evenTileBorderColor => PuzzleColors.transparent;
-  @override
-  Color get oddTileBorderColor => PuzzleColors.transparent;
-
-  @override
-  Color get evenTileTextColor => PuzzleColors.orange;
-  @override
-  Color get oddTileTextColor => PuzzleColors.blue;
+  Color tileTextColor(int value) => value.isEven ? PuzzleColors.orange : PuzzleColors.blue;
 
   @override
   Color get boardBackColor => PuzzleColors.black;
@@ -68,12 +60,9 @@ class GlowTheme extends PuzzleTheme {
   @override
   List<Object?> get props => [
         name,
-        evenTileBackColor,
-        oddTileBackColor,
-        evenTileBorderColor,
-        oddTileBorderColor,
-        evenTileTextColor,
-        oddTileTextColor,
+        tileBackColor,
+        tileBorderColor,
+        tileTextColor,
         tileClickSound,
         tileValue,
       ];

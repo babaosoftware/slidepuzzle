@@ -12,19 +12,11 @@ class DefaultTheme extends PuzzleTheme {
   String get name => 'Default';
 
   @override
-  Color get evenTileBackColor => PuzzleColors.cellEvenBackColor;
+  Color tileBackColor(int value) => value.isEven ? PuzzleColors.cellEvenBackColor : PuzzleColors.cellOddBackColor;
   @override
-  Color get oddTileBackColor => PuzzleColors.cellOddBackColor;
-
+  Color tileBorderColor(int value) => value.isEven ? PuzzleColors.cellBorderColorOdd : PuzzleColors.cellBorderColorEven;
   @override
-  Color get evenTileBorderColor => PuzzleColors.cellBorderColorOdd;
-  @override
-  Color get oddTileBorderColor => PuzzleColors.cellBorderColorEven;
-
-  @override
-  Color get evenTileTextColor => PuzzleColors.cellEvenTextColor;
-  @override
-  Color get oddTileTextColor => PuzzleColors.cellOddTextColor;
+  Color tileTextColor(int value) => value.isEven ? PuzzleColors.cellEvenTextColor : PuzzleColors.cellOddTextColor;
 
   @override
   Color get boardBackColor => PuzzleColors.boardBackColor;
@@ -60,12 +52,9 @@ class DefaultTheme extends PuzzleTheme {
   @override
   List<Object?> get props => [
         name,
-        evenTileBackColor,
-        oddTileBackColor,
-        evenTileBorderColor,
-        oddTileBorderColor,
-        evenTileTextColor,
-        oddTileTextColor,
+        tileBackColor,
+        tileBorderColor,
+        tileTextColor,
         tileClickSound,
         tileValue,
       ];

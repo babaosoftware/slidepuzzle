@@ -1,5 +1,3 @@
-import 'dart:async';
-
 import 'package:flutter/material.dart';
 import 'package:slidepuzzle/pages/startpage.dart';
 void main() {
@@ -13,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Slide Puzzle',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),

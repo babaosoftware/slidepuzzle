@@ -92,13 +92,15 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onGameHintReceived(GameHintReceived event, Emitter<GameState> emit) {
+    Board savedBoard = Board.copy(state.game.gameBoard);
     if (state.game.moveValue(event.value)) {
       bool gameSolved = state.game.checkGameSolved();
+      if (state.autoPlay) state.hintStack.add(savedBoard);
       emit(state.copyWith(
         game: Game.copy(state.game),
         autoPlay: gameSolved ? false : state.autoPlay,
         boardState: gameSolved ? BoardState.end : BoardState.ongoing,
-        hintStack: [],
+        hintStack: state.autoPlay ? state.hintStack : [],
         prevBoard: Board.copy(state.currentBoard),
         currentBoard: Board.copy(state.game.getGameBoard()),
         counter: state.counter + 1,
@@ -129,12 +131,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onGameHint(GameHint event, Emitter<GameState> emit) {
-    emit(state.copyWith(boardState: BoardState.hint, prevBoard: Board.copy(state.currentBoard)));
+    emit(state.copyWith(boardState: BoardState.hint, prevBoard: Board.copy(state.currentBoard), hintStack: []));
     _gameHint(false);
   }
 
   void _onAutoPlay(AutoPlay event, Emitter<GameState> emit) {
-    emit(state.copyWith(autoPlay: !state.autoPlay, boardState: BoardState.ongoing, prevBoard: Board.copy(state.currentBoard)));
+    emit(state.copyWith(autoPlay: !state.autoPlay, boardState: BoardState.ongoing, prevBoard: Board.copy(state.currentBoard), hintStack: []));
     _gameHint(true);
     // emit(state.copyWith(
     //     game: Game.copy(state.startGame),
@@ -145,9 +147,8 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   Future<Hint> calculateNextMove(Game game, List<Board> hintStack) {
-    return compute(calculateMove, game);
+    return compute(calculateMove, CalculateMoveParams(game, hintStack));
   }
-
 
 // emit was called after an event handler completed normally.
 // This is usually due to an unawaited future in an event handler.
@@ -296,6 +297,13 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   // }
 }
 
-  Hint calculateMove(Game game) {
-    return game.getBoardHint([]);
-  }
+class CalculateMoveParams {
+  final Game game;
+  final List<Board> hintStack;
+
+  CalculateMoveParams(this.game, this.hintStack);
+}
+
+Hint calculateMove(CalculateMoveParams params) {
+  return params.game.getBoardHint(params.hintStack);
+}

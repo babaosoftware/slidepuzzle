@@ -8,22 +8,14 @@ class WoodTheme extends PuzzleTheme {
   const WoodTheme() : super();
 
   @override
-  String get name => 'BlackWhite';
+  String get name => 'Orange';
 
   @override
-  Color get evenTileBackColor => PuzzleColors.transparent;
+  Color tileBackColor(int value) => PuzzleColors.transparent;
   @override
-  Color get oddTileBackColor => PuzzleColors.transparent;
-
+  Color tileBorderColor(int value) => PuzzleColors.transparent;
   @override
-  Color get evenTileBorderColor => PuzzleColors.transparent;
-  @override
-  Color get oddTileBorderColor => PuzzleColors.transparent;
-
-  @override
-  Color get evenTileTextColor => PuzzleColors.white;
-  @override
-  Color get oddTileTextColor => PuzzleColors.white;
+  Color tileTextColor(int value) => PuzzleColors.white;
 
   @override
   Color get boardBackColor => const Color(0xC0FFA726);
@@ -66,12 +58,9 @@ class WoodTheme extends PuzzleTheme {
   @override
   List<Object?> get props => [
         name,
-        evenTileBackColor,
-        oddTileBackColor,
-        evenTileBorderColor,
-        oddTileBorderColor,
-        evenTileTextColor,
-        oddTileTextColor,
+        tileBackColor,
+        tileBorderColor,
+        tileTextColor,
         tileClickSound,
         tileValue,
       ];

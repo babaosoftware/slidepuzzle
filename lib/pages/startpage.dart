@@ -7,6 +7,7 @@ import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themeevent.dart';
+import 'package:slidepuzzle/widgets/themebutton.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
 class StartPage extends StatefulWidget {
@@ -17,7 +18,7 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  String currentTheme = "Default";
+  String? currentTheme = "Default";
 
   @override
   Widget build(BuildContext context) {
@@ -27,14 +28,42 @@ class _StartPageState extends State<StartPage> {
       value: themeBloc,
       child: Scaffold(
           backgroundColor: themeBloc.state.theme.pageBackground,
-          appBar: AppBar(
-            title: const Text("Pick a game board"),
-          ),
+          appBar: null,
           body: Stack(children: [
-            SingleChildScrollView(
-              child: smallScreen ? oneColumnTable() : twoColumnTable(),
+            Positioned(
+              left: 0,
+              right: 0,
+              top: 60,
+              bottom: 0,
+              child: SingleChildScrollView(
+                child: smallScreen ? oneColumnTable() : twoColumnTable(),
+              ),
             ),
-            Positioned(top: 10, right: 10, child: themButton()),
+            Positioned(
+                top: 10,
+                left: 10,
+                right: 10,
+                child: Row(
+                  children: [
+                    // IconButton(onPressed: () {
+                    //   Navigator.pop(context);
+                    // }, icon: const Icon(Icons.arrow_back), color: themeBloc.state.theme.controlLabelColor,),
+                    const SizedBox(width: 120),
+                    Expanded(
+                        child: Center(
+                            child: Text(
+                          'Pick a board',
+                          style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 36),
+                        )),
+                        flex: 1),
+                    ThemeButton((index, newTheme) {
+                      setState(() {
+                        currentTheme = newTheme;
+                      });
+                      themeBloc.add(ThemeChanged(themeIndex: index));
+                    })
+                  ],
+                ))
           ])),
     );
   }
@@ -125,49 +154,6 @@ class _StartPageState extends State<StartPage> {
           ]),
         ],
       ),
-    );
-  }
-
-  Widget themButton() {
-    return DropdownButton<String>(
-      value: currentTheme,
-      icon: const Icon(Icons.arrow_downward),
-      elevation: 16,
-      style: const TextStyle(color: Colors.deepPurple),
-      underline: Container(
-        height: 2,
-        color: Colors.deepPurpleAccent,
-      ),
-      onChanged: (String? newValue) {
-        setState(() {
-          currentTheme = newValue!;
-        });
-        var index = 0;
-        switch (newValue) {
-          case 'Default':
-            index = 0;
-            break;
-          case 'Orange':
-            index = 1;
-            break;
-          case 'Glow':
-            index = 2;
-            break;
-          case 'Black/White':
-            index = 3;
-            break;
-          case 'Letters':
-            index = 4;
-            break;
-        }
-        themeBloc.add(ThemeChanged(themeIndex: index));
-      },
-      items: <String>['Default', 'Orange', 'Glow', 'Black/White', 'Letters'].map<DropdownMenuItem<String>>((String value) {
-        return DropdownMenuItem<String>(
-          value: value,
-          child: Text(value),
-        );
-      }).toList(),
     );
   }
 }
