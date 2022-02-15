@@ -8,6 +8,7 @@ import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themeevent.dart';
 import 'package:slidepuzzle/widgets/themebutton.dart';
+import 'package:slidepuzzle/widgets/themedialog.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
 class StartPage extends StatefulWidget {
@@ -56,12 +57,26 @@ class _StartPageState extends State<StartPage> {
                           style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 36),
                         )),
                         flex: 1),
-                    ThemeButton((index, newTheme) {
-                      setState(() {
-                        currentTheme = newTheme;
-                      });
-                      themeBloc.add(ThemeChanged(themeIndex: index));
-                    })
+                    IconButton(
+                      color: themeBloc.state.theme.controlLabelColor,
+                        onPressed: () async {
+                          String newTheme = await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return getThemeDialog(context, themeBloc.state.theme.name);
+                              });
+                          setState(() {
+                            currentTheme = newTheme;
+                          });
+                          themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme)));
+                        },
+                        icon: const Icon(Icons.tune)),
+                    // ThemeButton((index, newTheme) {
+                    //   setState(() {
+                    //     currentTheme = newTheme;
+                    //   });
+                    //   themeBloc.add(ThemeChanged(themeIndex: index));
+                    // })
                   ],
                 ))
           ])),
@@ -76,9 +91,12 @@ class _StartPageState extends State<StartPage> {
         children: [
           Padding(
             padding: const EdgeInsets.only(bottom: 4.0),
-            child: Text(
-              title,
-              style: const TextStyle(color: PuzzleColors.white, fontSize: 16),
+            child: BlocProvider.value(
+              value: themeBloc,
+              child: Text(
+                title,
+                style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 16),
+              ),
             ),
           ),
           InkWell(
