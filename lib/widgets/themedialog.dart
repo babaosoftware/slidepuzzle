@@ -6,7 +6,7 @@ Dialog getThemeDialog(BuildContext context, String currentTheme) {
     backgroundColor: Colors.lightBlue[100],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
     child: SizedBox(
-      height: 360,
+      height: 400,
       width: 100,
       child: Padding(
         padding: const EdgeInsets.all(16.0),

@@ -34,7 +34,7 @@ class WoodTheme extends PuzzleTheme {
   double get tileRadius => 12.0;
 
   @override
-  DecorationImage? tileImageBackground(int value) => const DecorationImage(image: AssetImage("images/woodtile.png"), fit: BoxFit.cover);
+  DecorationImage? tileImageBackground(int value) => const DecorationImage(image: AssetImage("assets/images/woodtile.png"), fit: BoxFit.cover);
 
   @override
   double get tileSize => 70;

@@ -14,3 +14,10 @@ class ThemeChanged extends ThemeEvent {
   @override
   List<Object> get props => [themeIndex];
 }
+
+class ThemePlay extends ThemeEvent {
+  const ThemePlay();
+
+  @override
+  List<Object> get props => [];
+}

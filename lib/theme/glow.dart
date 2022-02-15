@@ -36,7 +36,7 @@ class GlowTheme extends PuzzleTheme {
   double get tileRadius => 16.0;
 
   @override
-  DecorationImage? tileImageBackground(int value) => DecorationImage(image: AssetImage(value.isEven ? "images/gloworange.png" : "images/glowblue.png"), fit: BoxFit.cover);
+  DecorationImage? tileImageBackground(int value) => DecorationImage(image: AssetImage(value.isEven ? "assets/images/gloworange.png" : "assets/images/glowblue.png"), fit: BoxFit.cover);
 
   @override
   double get tileSize => 70;

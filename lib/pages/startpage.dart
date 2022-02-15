@@ -32,19 +32,24 @@ class _StartPageState extends State<StartPage> {
             Positioned(
               left: 0,
               right: 0,
-              top: 60,
+              top: 80,
               bottom: 0,
               child: SingleChildScrollView(
                 child: smallScreen ? oneColumnTable() : twoColumnTable(),
               ),
             ),
             Positioned(
-                top: 10,
+                top: 20,
                 left: 10,
                 right: 10,
                 child: Row(
                   children: [
-                    const SizedBox(width: 120),
+                    const IconButton(
+                        onPressed: null,
+                        icon: Icon(
+                          Icons.tune,
+                          color: Colors.transparent,
+                        )),
                     Expanded(
                         child: Center(
                             child: Text(
@@ -55,15 +60,17 @@ class _StartPageState extends State<StartPage> {
                     IconButton(
                         color: themeBloc.state.theme.controlLabelColor,
                         onPressed: () async {
-                          String newTheme = await showDialog(
+                          String? newTheme = await showDialog(
                               context: context,
                               builder: (BuildContext context) {
                                 return getThemeDialog(context, themeBloc.state.theme.name);
                               });
-                          setState(() {
-                            currentTheme = newTheme;
-                          });
-                          themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme)));
+                          if (null != newTheme) {
+                            setState(() {
+                              currentTheme = newTheme;
+                            });
+                            themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme)));
+                          }
                         },
                         icon: const Icon(Icons.tune)),
                   ],

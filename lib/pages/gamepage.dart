@@ -29,7 +29,6 @@ class _GamePageState extends State<GamePage> {
   @override
   Widget build(BuildContext context) {
     final smallScreen = MediaQuery.of(context).size.width <= PuzzleBreakpoints.small;
-
     return Scaffold(
         backgroundColor: themeBloc.state.theme.pageBackground,
         appBar: null,
@@ -39,10 +38,13 @@ class _GamePageState extends State<GamePage> {
             BlocProvider.value(value: themeBloc),
           ],
           child: Stack(children: [
-            Center(
-              child: smallScreen
-                  ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
-                  : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
+            Padding(
+              padding: const EdgeInsets.only(top: 30.0),
+              child: Center(
+                child: smallScreen
+                    ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
+                    : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
+              ),
             ),
             Positioned(
                 top: 10,
@@ -50,10 +52,20 @@ class _GamePageState extends State<GamePage> {
                 right: 10,
                 child: Row(
                   children: [
-                    IconButton(onPressed: () {
-                      Navigator.pop(context);
-                    }, icon: const Icon(Icons.arrow_back), color: themeBloc.state.theme.controlLabelColor,),
-                    Expanded(child: Center(child: Text(widget.title, style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 36),)), flex: 1),
+                    IconButton(
+                      onPressed: () {
+                        Navigator.pop(context);
+                      },
+                      icon: const Icon(Icons.arrow_back),
+                      color: themeBloc.state.theme.controlLabelColor,
+                    ),
+                    Expanded(
+                        child: Center(
+                            child: Text(
+                          widget.title,
+                          style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 30),
+                        )),
+                        flex: 1),
                     // ThemeButton(themeBloc.state.theme.name, (index, newTheme) {
                     //   themeBloc.add(ThemeChanged(themeIndex: index));
                     // })

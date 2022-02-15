@@ -71,6 +71,14 @@ class Board {
     return true;
   }
 
+  bool canMove(int value) {
+    List<Cell> movable = getMovableCells();
+    for (int i = 0; i < movable.length; i++) {
+      if (movable[i].value == value) return true;
+    }
+    return false;
+  }
+
   bool moveCell(int i, int j) {
     int emptyi = valuesi[emptyCellValue - 1];
     int emptyj = valuesj[emptyCellValue - 1];

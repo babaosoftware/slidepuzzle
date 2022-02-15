@@ -1,3 +1,4 @@
+import 'package:audioplayers/audioplayers.dart';
 import 'package:bloc/bloc.dart';
 import 'package:slidepuzzle/state/themeevent.dart';
 import 'package:slidepuzzle/state/themestate.dart';
@@ -10,15 +11,31 @@ import 'package:slidepuzzle/theme/puzzle.dart';
 import 'package:slidepuzzle/theme/wood.dart';
 
 class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
-  ThemeBloc({required List<PuzzleTheme> initialThemes})
-      : super(ThemeState(themes: initialThemes, theme: initialThemes[0])) {
+  late AudioCache playerCache;
+  late AudioPlayer player;
+
+  ThemeBloc({required List<PuzzleTheme> initialThemes}) : super(ThemeState(themes: initialThemes, theme: initialThemes[0])) {
     on<ThemeChanged>(_onThemeChanged);
+    on<ThemePlay>(_onPlay);
+
+    player = AudioPlayer();
+    playerCache = AudioCache(fixedPlayer: player);
   }
 
   void _onThemeChanged(ThemeChanged event, Emitter<ThemeState> emit) {
     emit(state.copyWith(theme: state.themes[event.themeIndex]));
   }
+
+  void _onPlay(ThemePlay event, Emitter<ThemeState> emit) {
+    playerCache.play(state.theme.tileClickSound);
+  }
 }
 
-final themeBloc = ThemeBloc(initialThemes: [const DefaultTheme(), const WoodTheme(), const GlowTheme(), const BlackWhiteTheme(), const LettersTheme(), const OrangeGradientTheme(),]);
-
+final themeBloc = ThemeBloc(initialThemes: [
+  const DefaultTheme(),
+  const WoodTheme(),
+  const GlowTheme(),
+  const BlackWhiteTheme(),
+  const LettersTheme(),
+  const OrangeGradientTheme(),
+]);
