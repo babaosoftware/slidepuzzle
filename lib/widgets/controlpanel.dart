@@ -1,12 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
 import 'package:slidepuzzle/state/gameevent.dart';
 import 'package:slidepuzzle/state/gamestate.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
-import 'package:slidepuzzle/state/themestate.dart';
 
 class ControlPanel extends StatefulWidget {
   const ControlPanel({Key? key}) : super(key: key);

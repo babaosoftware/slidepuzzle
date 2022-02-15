@@ -1,5 +1,4 @@
 import 'package:equatable/equatable.dart';
-import 'package:slidepuzzle/models/hint.dart';
 
 abstract class GameEvent extends Equatable {
   const GameEvent();

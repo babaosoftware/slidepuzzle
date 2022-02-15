@@ -1,5 +1,3 @@
-// ignore_for_file: public_member_api_docs
-
 import 'package:equatable/equatable.dart';
 
 abstract class ThemeEvent extends Equatable {
@@ -16,19 +14,3 @@ class ThemeChanged extends ThemeEvent {
   @override
   List<Object> get props => [themeIndex];
 }
-
-/// The theme identified by [PuzzleTheme.name] has been updated
-/// and should be replaced in [ThemeState.themes].
-///
-/// This can happen if the theme named [PuzzleTheme.name] is already
-/// present in [ThemeState.themes] but needs to be updated with a new
-/// one, e.g. with slightly different colors or options.
-// class ThemeUpdated extends ThemeEvent {
-//   const ThemeUpdated({required this.theme});
-
-//   /// The theme from [ThemeState.themes] that should be replaced.
-//   final PuzzleTheme theme;
-
-//   @override
-//   List<Object> get props => [theme];
-// }

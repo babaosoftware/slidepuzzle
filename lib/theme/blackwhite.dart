@@ -1,11 +1,8 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
 
 class BlackWhiteTheme extends PuzzleTheme {
-  /// {@macro simple_theme}
   const BlackWhiteTheme() : super();
 
   @override

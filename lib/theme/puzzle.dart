@@ -1,12 +1,9 @@
-import 'dart:ui';
-
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
 abstract class PuzzleTheme extends Equatable {
   const PuzzleTheme();
 
-  /// The display name of this theme.
   String get name;
 
   Color tileBackColor(int value);
@@ -34,9 +31,4 @@ abstract class PuzzleTheme extends Equatable {
   String get tileClickSound;
 
   String tileValue(int value);
-
-  /// The puzzle layout delegate of this theme.
-  ///
-  /// Used for building sections of the puzzle UI.
-  // PuzzleLayoutDelegate get layoutDelegate;
 }

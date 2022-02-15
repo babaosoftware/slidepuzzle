@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themeevent.dart';
-import 'package:slidepuzzle/widgets/themebutton.dart';
 import 'package:slidepuzzle/widgets/themedialog.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
@@ -46,9 +44,6 @@ class _StartPageState extends State<StartPage> {
                 right: 10,
                 child: Row(
                   children: [
-                    // IconButton(onPressed: () {
-                    //   Navigator.pop(context);
-                    // }, icon: const Icon(Icons.arrow_back), color: themeBloc.state.theme.controlLabelColor,),
                     const SizedBox(width: 120),
                     Expanded(
                         child: Center(
@@ -58,7 +53,7 @@ class _StartPageState extends State<StartPage> {
                         )),
                         flex: 1),
                     IconButton(
-                      color: themeBloc.state.theme.controlLabelColor,
+                        color: themeBloc.state.theme.controlLabelColor,
                         onPressed: () async {
                           String newTheme = await showDialog(
                               context: context,
@@ -71,12 +66,6 @@ class _StartPageState extends State<StartPage> {
                           themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme)));
                         },
                         icon: const Icon(Icons.tune)),
-                    // ThemeButton((index, newTheme) {
-                    //   setState(() {
-                    //     currentTheme = newTheme;
-                    //   });
-                    //   themeBloc.add(ThemeChanged(themeIndex: index));
-                    // })
                   ],
                 ))
           ])),
@@ -147,10 +136,6 @@ class _StartPageState extends State<StartPage> {
   Widget twoColumnTable() {
     return Center(
       child: Table(
-        // columnWidths: const <int, TableColumnWidth>{
-        //   0: IntrinsicColumnWidth(),
-        //   1: IntrinsicColumnWidth(),
-        // },
         defaultColumnWidth: const FixedColumnWidth(300),
         defaultVerticalAlignment: TableCellVerticalAlignment.middle,
         children: [

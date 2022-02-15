@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/widgets.dart';
 import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/theme/puzzle.dart';
 
 class GlowTheme extends PuzzleTheme {
-  /// {@macro simple_theme}
   const GlowTheme() : super();
 
   @override

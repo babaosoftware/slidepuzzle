@@ -1,7 +1,6 @@
 
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:slidepuzzle/colors/colors.dart';
 import 'package:slidepuzzle/models/board.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themestate.dart';
