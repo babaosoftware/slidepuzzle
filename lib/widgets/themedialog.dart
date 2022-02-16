@@ -5,27 +5,28 @@ Dialog getThemeDialog(BuildContext context, String currentTheme) {
     elevation: 0,
     backgroundColor: Colors.lightBlue[100],
     shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(30.0)),
-    child: SizedBox(
-      height: 400,
-      width: 100,
+    child: ConstrainedBox(
+      constraints: const BoxConstraints(maxWidth: 300),
       child: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: Column(
-          children: <Widget>[
-            const Padding(
-              padding: EdgeInsets.only(bottom: 8.0),
-              child: Text(
-                'Pick a theme',
-                style: TextStyle(fontSize: 20, color: Colors.black),
-              ),
-            ),
-            createTile(context, 'Default', 'Default', currentTheme),
-            createTile(context, 'Orange', 'Orange', currentTheme),
-            createTile(context, 'Glow', 'Glow', currentTheme),
-            createTile(context, 'Monochrome', 'Monochrome', currentTheme),
-            createTile(context, 'Letters', 'Letters', currentTheme),
-            createTile(context, 'Gradient', 'Gradient', currentTheme),
-          ],
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              const Padding(
+          padding: EdgeInsets.only(bottom: 8.0),
+          child: Text(
+            'Pick a theme',
+            style: TextStyle(fontSize: 20, color: Colors.black),
+          ),
+        ),
+              createTile(context, 'Default', 'Default', currentTheme),
+              createTile(context, 'Orange', 'Orange', currentTheme),
+              createTile(context, 'Glow', 'Glow', currentTheme),
+              createTile(context, 'Monochrome', 'Monochrome', currentTheme),
+              createTile(context, 'Letters', 'Letters', currentTheme),
+              createTile(context, 'Gradient', 'Gradient', currentTheme),
+            ],
+          ),
         ),
       ),
     ),

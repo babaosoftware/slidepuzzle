@@ -37,13 +37,7 @@ class WoodTheme extends PuzzleTheme {
   DecorationImage? tileImageBackground(int value) => const DecorationImage(image: AssetImage("assets/images/woodtile.png"), fit: BoxFit.cover);
 
   @override
-  double get tileSize => 70;
-  @override
-  double get fontSize => 25;
-  @override
-  double get lightTileSize => 50;
-  @override
-  double get lightFontSize => 15;
+  double get fontSize => 15;
 
   @override
   String get tileClickSound => 'audio/tilemove.wav';

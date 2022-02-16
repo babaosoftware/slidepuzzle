@@ -39,14 +39,8 @@ class GlowTheme extends PuzzleTheme {
   DecorationImage? tileImageBackground(int value) => DecorationImage(image: AssetImage(value.isEven ? "assets/images/gloworange.png" : "assets/images/glowblue.png"), fit: BoxFit.cover);
 
   @override
-  double get tileSize => 70;
-  @override
   double get fontSize => 25;
-  @override
-  double get lightTileSize => 50;
-  @override
-  double get lightFontSize => 15;
-
+  
   @override
   String get tileClickSound => 'audio/tilemove.wav';
 

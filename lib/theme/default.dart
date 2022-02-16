@@ -30,15 +30,6 @@ class DefaultTheme extends PuzzleTheme {
   DecorationImage? tileImageBackground(int value) => null;
 
   @override
-  double get tileSize => 70;
-  @override
-  double get fontSize => 35;
-  @override
-  double get lightTileSize => 50;
-  @override
-  double get lightFontSize => 15;
-
-  @override
   String get tileClickSound => 'audio/tilemove.wav';
 
   @override

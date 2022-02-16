@@ -23,10 +23,10 @@ abstract class PuzzleTheme extends Equatable {
 
   DecorationImage? tileImageBackground(int value);
 
-  double get tileSize;
-  double get fontSize;
-  double get lightTileSize;
-  double get lightFontSize;
+  double get tileSize => 70;
+  double get fontSize => 30;
+  double get lightTileSize => 50;
+  double get lightFontSize => 15;
 
   String get tileClickSound;
 
