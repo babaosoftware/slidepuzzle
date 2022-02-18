@@ -4,6 +4,7 @@ import 'package:slidepuzzle/layouts/breakpoints.dart';
 import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/state/gamebloc.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
+import 'package:slidepuzzle/state/themeevent.dart';
 import 'package:slidepuzzle/widgets/controlpanel.dart';
 import 'package:slidepuzzle/widgets/tileboard.dart';
 
@@ -19,10 +20,12 @@ class GamePage extends StatefulWidget {
 
 class _GamePageState extends State<GamePage> {
   late GameBloc gameBloc;
+  late bool sound;
 
   @override
   void initState() {
     gameBloc = GameBloc(widget.boardType, widget.boardSize);
+    sound = themeBloc.state.sound;
     super.initState();
   }
 
@@ -69,6 +72,15 @@ class _GamePageState extends State<GamePage> {
                     // ThemeButton(themeBloc.state.theme.name, (index, newTheme) {
                     //   themeBloc.add(ThemeChanged(themeIndex: index));
                     // })
+                    IconButton(
+                        color: themeBloc.state.theme.controlLabelColor,
+                        onPressed: () {
+                          themeBloc.add(const ThemeSound());
+                          setState(() {
+                            sound = !sound;
+                          });
+                        },
+                        icon: Icon(sound ? Icons.volume_up : Icons.volume_off)),
                   ],
                 ))
           ]),

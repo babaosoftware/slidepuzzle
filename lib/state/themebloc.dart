@@ -17,6 +17,7 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   ThemeBloc({required List<PuzzleTheme> initialThemes}) : super(ThemeState(themes: initialThemes, theme: initialThemes[0])) {
     on<ThemeChanged>(_onThemeChanged);
     on<ThemePlay>(_onPlay);
+    on<ThemeSound>(_onSound);
 
     player = AudioPlayer();
     playerCache = AudioCache(fixedPlayer: player);
@@ -27,7 +28,13 @@ class ThemeBloc extends Bloc<ThemeEvent, ThemeState> {
   }
 
   void _onPlay(ThemePlay event, Emitter<ThemeState> emit) {
-    playerCache.play(state.theme.tileClickSound);
+    if (state.sound) {
+      playerCache.play(state.theme.tileClickSound);
+    }
+  }
+
+  void _onSound(ThemeSound event, Emitter<ThemeState> emit) {
+    emit(state.copyWith(sound: !state.sound));
   }
 }
 

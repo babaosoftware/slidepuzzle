@@ -21,3 +21,10 @@ class ThemePlay extends ThemeEvent {
   @override
   List<Object> get props => [];
 }
+
+class ThemeSound extends ThemeEvent {
+  const ThemeSound();
+
+  @override
+  List<Object> get props => [];
+}
