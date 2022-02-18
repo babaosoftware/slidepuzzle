@@ -15,7 +15,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Slide Puzzle',
+      title: '8/15 Slide Puzzle',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
