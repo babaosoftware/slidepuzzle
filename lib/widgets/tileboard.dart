@@ -103,7 +103,7 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
 
     bool samePos = currenti == previ && currentj == prevj;
 
-    Tile tile = Tile(board[currenti][currentj], board[currenti][currentj] == state.currentBoard.emptyCellValue, key: Key(board[currenti][currentj].toString()));
+    Tile tile = Tile(board[currenti][currentj], board[currenti][currentj] == state.currentBoard.emptyCellValue, state.currentBoard.size, key: Key(board[currenti][currentj].toString()));
 
     if (samePos) {
       return Positioned(left: themeState.theme.tileSize * currentj, top: themeState.theme.tileSize * currenti, child: tile);

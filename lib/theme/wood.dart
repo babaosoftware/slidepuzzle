@@ -9,7 +9,7 @@ class WoodTheme extends PuzzleTheme {
   String get name => 'Orange';
 
   @override
-  Color tileBackColor(int value) => PuzzleColors.transparent;
+  Color tileBackColor(int value, int boarSize) => PuzzleColors.transparent;
   @override
   Color tileBorderColor(int value) => PuzzleColors.transparent;
   @override

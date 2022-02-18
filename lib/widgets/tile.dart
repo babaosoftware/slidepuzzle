@@ -9,11 +9,12 @@ import 'package:slidepuzzle/state/themestate.dart';
 import 'package:slidepuzzle/typography/text_styles.dart';
 
 class Tile extends StatelessWidget {
-  const Tile(this.value, this.isEmpty, {this.light = false, Key? key}) : super(key: key);
+  const Tile(this.value, this.isEmpty, this.boardSize, {this.light = false, Key? key}) : super(key: key);
 
   final int value;
   final bool isEmpty;
   final bool light;
+  final int boardSize;
 
   @override
   Widget build(BuildContext context) {
@@ -26,7 +27,7 @@ class Tile extends StatelessWidget {
           child: Container(
             decoration: BoxDecoration(
               image: isEmpty ? null : state.theme.tileImageBackground(value),
-              color: isEmpty ? PuzzleColors.transparent : state.theme.tileBackColor(value),
+              color: isEmpty ? PuzzleColors.transparent : state.theme.tileBackColor(value, boardSize),
               borderRadius: BorderRadius.all(
                 Radius.circular(state.theme.tileRadius),
               ),
@@ -55,7 +56,7 @@ class Tile extends StatelessWidget {
                 ),
               ).copyWith(
                 // foregroundColor: MaterialStateProperty.all(state.theme.tileTextColor(value)),
-                backgroundColor: MaterialStateProperty.all(isEmpty ? PuzzleColors.transparent : state.theme.tileBackColor(value)),
+                backgroundColor: MaterialStateProperty.all(isEmpty ? PuzzleColors.transparent : state.theme.tileBackColor(value, boardSize)),
               ),
               onPressed: light || isEmpty
                   ? null

@@ -6,7 +6,7 @@ abstract class PuzzleTheme extends Equatable {
 
   String get name;
 
-  Color tileBackColor(int value);
+  Color tileBackColor(int value, int boarSize);
   Color tileBorderColor(int value);
   Color tileTextColor(int value);
 

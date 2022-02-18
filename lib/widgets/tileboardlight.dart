@@ -49,7 +49,7 @@ class TileBoardLight extends StatelessWidget {
   }
 
   Widget makeTile(ThemeState themeState, int currenti, int currentj) {
-    Tile tile = Tile(board.board[currenti][currentj], board.board[currenti][currentj] == board.emptyCellValue, key: Key(board.board[currenti][currentj].toString()), light: true,);
+    Tile tile = Tile(board.board[currenti][currentj], board.board[currenti][currentj] == board.emptyCellValue, board.size, key: Key(board.board[currenti][currentj].toString()), light: true,);
     return Positioned(left: themeState.theme.lightTileSize * currentj, top: themeState.theme.lightTileSize * currenti, child: tile);
   }
 }

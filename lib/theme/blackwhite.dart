@@ -9,7 +9,7 @@ class BlackWhiteTheme extends PuzzleTheme {
   String get name => 'Monochrome';
 
   @override
-  Color tileBackColor(int value) =>PuzzleColors.white;
+  Color tileBackColor(int value, int boarSize) =>PuzzleColors.white;
   @override
   Color tileBorderColor(int value) => PuzzleColors.transparent;
   @override

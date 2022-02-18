@@ -9,7 +9,7 @@ class DefaultTheme extends PuzzleTheme {
   String get name => 'Default';
 
   @override
-  Color tileBackColor(int value) => value.isEven ? PuzzleColors.cellEvenBackColor : PuzzleColors.cellOddBackColor;
+  Color tileBackColor(int value, int boarSize) => value.isEven ? PuzzleColors.cellEvenBackColor : PuzzleColors.cellOddBackColor;
   @override
   Color tileBorderColor(int value) => value.isEven ? PuzzleColors.cellBorderColorOdd : PuzzleColors.cellBorderColorEven;
   @override
