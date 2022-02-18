@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:slidepuzzle/colors/colors.dart';
-import 'package:slidepuzzle/theme/puzzle.dart';
+import 'package:slidepuzzle/theme/puzzletheme.dart';
 
-class DefaultTheme extends PuzzleTheme {
-  const DefaultTheme() : super();
+class ClassicTheme extends PuzzleTheme {
+  const ClassicTheme() : super();
 
   @override
-  String get name => 'Default';
+  String get name => 'Classic';
 
   @override
   Color tileBackColor(int value, int boarSize) => value.isEven ? PuzzleColors.cellEvenBackColor : PuzzleColors.cellOddBackColor;

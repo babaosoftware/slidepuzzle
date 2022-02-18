@@ -6,6 +6,7 @@ import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themeevent.dart';
+import 'package:slidepuzzle/theme/puzzletheme.dart';
 import 'package:slidepuzzle/widgets/themedialog.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
@@ -17,7 +18,7 @@ class StartPage extends StatefulWidget {
 }
 
 class _StartPageState extends State<StartPage> {
-  String? currentTheme = "Default";
+  String? currentTheme = "Classic";
 
   @override
   Widget build(BuildContext context) {
@@ -69,7 +70,7 @@ class _StartPageState extends State<StartPage> {
                             setState(() {
                               currentTheme = newTheme;
                             });
-                            themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme)));
+                            themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme ?? "")));
                           }
                         },
                         icon: const Icon(Icons.tune)),

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import 'package:slidepuzzle/theme/puzzle.dart';
+import 'package:slidepuzzle/theme/puzzletheme.dart';
 
 class ThemeState extends Equatable {
   const ThemeState({

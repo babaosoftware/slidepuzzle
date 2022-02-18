@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:slidepuzzle/state/themebloc.dart';
 
 Dialog getThemeDialog(BuildContext context, String currentTheme) {
   return Dialog(
@@ -13,18 +14,13 @@ Dialog getThemeDialog(BuildContext context, String currentTheme) {
           child: Column(
             children: <Widget>[
               const Padding(
-          padding: EdgeInsets.only(bottom: 8.0),
-          child: Text(
-            'Pick a theme',
-            style: TextStyle(fontSize: 20, color: Colors.black),
-          ),
-        ),
-              createTile(context, 'Default', 'Default', currentTheme),
-              createTile(context, 'Orange', 'Orange', currentTheme),
-              createTile(context, 'Glow', 'Glow', currentTheme),
-              createTile(context, 'Monochrome', 'Monochrome', currentTheme),
-              createTile(context, 'Letters', 'Letters', currentTheme),
-              createTile(context, 'Gradient', 'Gradient', currentTheme),
+                padding: EdgeInsets.only(bottom: 8.0),
+                child: Text(
+                  'Pick a theme',
+                  style: TextStyle(fontSize: 20, color: Colors.black),
+                ),
+              ),
+              ...themeBloc.state.themes.map((theme) => createTile(context, theme.name, theme.name, currentTheme)).toList(),
             ],
           ),
         ),
@@ -47,27 +43,6 @@ RadioListTile<String> createTile(BuildContext context, String title, String valu
   );
 }
 
-int getThemeIndex(String? themeName) {
-  var index = 0;
-  switch (themeName) {
-    case 'Default':
-      index = 0;
-      break;
-    case 'Orange':
-      index = 1;
-      break;
-    case 'Glow':
-      index = 2;
-      break;
-    case 'Monochrome':
-      index = 3;
-      break;
-    case 'Letters':
-      index = 4;
-      break;
-    case 'Gradient':
-      index = 5;
-      break;
-  }
-  return index;
+int getThemeIndex(String themeName) {
+  return themeBloc.state.themes.map((theme) => theme.name).toList().indexOf(themeName);
 }

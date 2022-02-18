@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:slidepuzzle/colors/colors.dart';
-import 'package:slidepuzzle/theme/puzzle.dart';
+import 'package:slidepuzzle/theme/puzzletheme.dart';
 
-class OrangeGradientTheme extends PuzzleTheme {
-  const OrangeGradientTheme() : super();
+class GradientTheme extends PuzzleTheme {
+  const GradientTheme() : super();
 
   @override
   String get name => 'Gradient';

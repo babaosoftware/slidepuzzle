@@ -1,19 +1,19 @@
 import 'package:flutter/material.dart';
 import 'package:slidepuzzle/colors/colors.dart';
-import 'package:slidepuzzle/theme/puzzle.dart';
+import 'package:slidepuzzle/theme/puzzletheme.dart';
 
-class BlackWhiteTheme extends PuzzleTheme {
-  const BlackWhiteTheme() : super();
-
-  @override
-  String get name => 'Monochrome';
+class GlowTheme extends PuzzleTheme {
+  const GlowTheme() : super();
 
   @override
-  Color tileBackColor(int value, int boarSize) =>PuzzleColors.white;
+  String get name => 'Glow';
+
+  @override
+  Color tileBackColor(int value, int boarSize) => PuzzleColors.transparent;
   @override
   Color tileBorderColor(int value) => PuzzleColors.transparent;
   @override
-  Color tileTextColor(int value) => PuzzleColors.black;
+  Color tileTextColor(int value) => value.isEven ? PuzzleColors.orange : PuzzleColors.blue;
 
   @override
   Color get boardBackColor => PuzzleColors.black;
@@ -24,16 +24,23 @@ class BlackWhiteTheme extends PuzzleTheme {
   Color get pageBackground => PuzzleColors.black;
 
   @override
-  Color get controlButtonColor => Colors.grey.shade900;
+  Color get controlButtonColor => const Color(0xFFFF9800);
   @override
-  Color get controlButtonSurfaceColor => Colors.grey;
+  Color get controlButtonSurfaceColor => Colors.orange;
+  @override
+  Color get controlLabelColor => Colors.orange;
+
+
 
   @override
-  double get tileRadius => 12.0;
+  double get tileRadius => 16.0;
 
   @override
-  DecorationImage? tileImageBackground(int value) => null;
+  DecorationImage? tileImageBackground(int value) => DecorationImage(image: AssetImage(value.isEven ? "assets/images/gloworange.png" : "assets/images/glowblue.png"), fit: BoxFit.cover);
 
+  @override
+  double get fontSize => 25;
+  
   @override
   String get tileClickSound => 'audio/tilemove.wav';
 
@@ -52,3 +59,5 @@ class BlackWhiteTheme extends PuzzleTheme {
         tileValue,
       ];
 }
+
+

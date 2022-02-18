@@ -1,6 +1,6 @@
-import 'package:slidepuzzle/theme/default.dart';
+import 'package:slidepuzzle/theme/classictheme.dart';
 
-class LettersTheme extends DefaultTheme{
+class LettersTheme extends ClassicTheme{
 
 const LettersTheme() : super();
 
