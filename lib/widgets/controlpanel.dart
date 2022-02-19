@@ -29,7 +29,6 @@ class _ControlPanelState extends State<ControlPanel> {
     final themeState = context.select((ThemeBloc bloc) => bloc.state);
     final counter = state.counter;
     final gameEnd = state.boardState == BoardState.end;
-    final isHint = state.boardState == BoardState.hint;
     final autoPlay = state.autoPlay;
     final initialized = state.initialized;
     return Table(
@@ -42,7 +41,7 @@ class _ControlPanelState extends State<ControlPanel> {
         TableRow(children: [
           Padding(
             padding: const EdgeInsets.only(left: 24.0, top: 8.0, bottom: 8.0, right: 8.0),
-            child: Text(gameEnd ? 'Game over!' : '', style: TextStyle(color: themeState.theme.controlLabelColor, fontSize: 20)),
+            child: Text(gameEnd ? 'Game over!' : '', style: TextStyle(color: themeState.theme.controlLabelColor, fontSize: 16)),
           ),
           Container(),
         ]),
@@ -51,8 +50,7 @@ class _ControlPanelState extends State<ControlPanel> {
           buildPanelButton("Restart", !initialized || autoPlay || counter <= 0 ? null : () => context.read<GameBloc>().add(const RestartGame())),
         ]),
         TableRow(children: [
-          buildPanelButton("Hint", !initialized || autoPlay || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const GameHint()),
-              showSpinner: isHint),
+          buildPanelButton("Hint", !initialized || autoPlay || gameEnd || state.boardSize > 4 ? null : () => context.read<GameBloc>().add(const GameHint())),
           buildPanelButton("Back", !initialized || autoPlay || counter <= 0 ? null : () => context.read<GameBloc>().add(const GameBack())),
         ]),
         TableRow(children: [
@@ -67,7 +65,7 @@ class _ControlPanelState extends State<ControlPanel> {
     );
   }
 
-  Widget buildPanelButton(String text, void Function()? onPressed, {showSpinner = false}) {
+  Widget buildPanelButton(String text, void Function()? onPressed) {
     final themeState = context.select((ThemeBloc bloc) => bloc.state);
     return Padding(
       padding: const EdgeInsets.all(8.0),
@@ -81,7 +79,7 @@ class _ControlPanelState extends State<ControlPanel> {
             ),
           ),
           onPressed: onPressed,
-          child: showSpinner ? const SizedBox(width: 16, height: 16, child: CircularProgressIndicator(color: Colors.white)) : Text(text)),
+          child: Text(text)),
     );
   }
 }

@@ -99,7 +99,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onGameHintReceived(GameHintReceived event, Emitter<GameState> emit) {
     Board savedBoard = Board.copy(state.game.gameBoard);
-    if (state.game.moveValue(event.value)) {
+    if (event.value != 0 && state.game.moveValue(event.value)) {
       bool gameSolved = state.game.checkGameSolved();
       if (state.autoPlay) state.hintStack.add(savedBoard);
       emit(state.copyWith(
@@ -115,7 +115,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _gameHint(bool fromAutoPlay) {
-    Timer(const Duration(milliseconds: 400), () async {
+    Timer(Duration(milliseconds: fromAutoPlay ? 500 : 100), () async {
       if (isClosed || fromAutoPlay && !state.autoPlay) return;
       int value;
       if (values.isNotEmpty) {
