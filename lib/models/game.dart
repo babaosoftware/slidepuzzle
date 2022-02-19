@@ -107,7 +107,6 @@ class Game {
           values.add(currentSaver.value);
           currentSaver = currentSaver.prevSaver;
         }
-        debugPrint('values count: ${values.length} boards count: ${boards.length}');
         return Hint(values[values.length - 1], saver.count, values);
       }
       List<Cell> mCells = findMovableCells(saver.board);
