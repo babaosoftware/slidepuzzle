@@ -18,7 +18,7 @@ class ClassicTheme extends PuzzleTheme {
   @override
   Color get boardBackColor => PuzzleColors.boardBackColor;
   @override
-  Color get boardBorderColor => PuzzleColors.boardBorderColor;
+  Color boardBorderColor(bool hasFocus) => hasFocus ? PuzzleColors.white : PuzzleColors.boardBorderColor;
 
   @override
   Color get pageBackground => PuzzleColors.gameBack;

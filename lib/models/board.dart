@@ -2,6 +2,8 @@ import 'package:slidepuzzle/models/target.dart';
 
 import 'cell.dart';
 
+enum BoardKey { left, right, up, down }
+
 class Board {
   late List<List<int>> board;
   late int size;
@@ -50,14 +52,30 @@ class Board {
     return Cell(valuesi[value - 1], valuesj[value - 1], value);
   }
 
+  int getKeyValue(BoardKey key) {
+    int emptyi = valuesi[emptyCellValue - 1];
+    int emptyj = valuesj[emptyCellValue - 1];
+
+    switch (key) {
+      case BoardKey.left:
+        return (emptyj < size - 1) ? board[emptyi][emptyj + 1] : -1;
+      case BoardKey.right:
+        return (emptyj > 0) ? board[emptyi][emptyj - 1] : -1;
+      case BoardKey.up:
+        return (emptyi < size - 1) ? board[emptyi + 1][emptyj] : -1;
+      case BoardKey.down:
+        return (emptyi > 0) ? board[emptyi - 1][emptyj] : -1;
+    }
+  }
+
   List<Cell> getMovableCells() {
     List<Cell> cells = [];
     int emptyi = valuesi[emptyCellValue - 1];
     int emptyj = valuesj[emptyCellValue - 1];
-    if (emptyi > 0) cells.add(Cell(emptyi - 1, emptyj, board[emptyi - 1][emptyj]));
-    if (emptyi < size - 1) cells.add(Cell(emptyi + 1, emptyj, board[emptyi + 1][emptyj]));
-    if (emptyj > 0) cells.add(Cell(emptyi, emptyj - 1, board[emptyi][emptyj - 1]));
-    if (emptyj < size - 1) cells.add(Cell(emptyi, emptyj + 1, board[emptyi][emptyj + 1]));
+    if (emptyi > 0) cells.add(Cell(emptyi - 1, emptyj, board[emptyi - 1][emptyj])); // cell on top of empty
+    if (emptyi < size - 1) cells.add(Cell(emptyi + 1, emptyj, board[emptyi + 1][emptyj])); // cell beneath of empty
+    if (emptyj > 0) cells.add(Cell(emptyi, emptyj - 1, board[emptyi][emptyj - 1])); // cell to the left of empty
+    if (emptyj < size - 1) cells.add(Cell(emptyi, emptyj + 1, board[emptyi][emptyj + 1])); // cell to the right of empty
     return cells;
   }
 

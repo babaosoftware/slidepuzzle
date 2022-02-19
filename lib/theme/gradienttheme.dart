@@ -77,7 +77,7 @@ class GradientTheme extends PuzzleTheme {
   @override
   Color get boardBackColor => PuzzleColors.black;
   @override
-  Color get boardBorderColor => PuzzleColors.grey1;
+  Color boardBorderColor(bool hasFocus) => hasFocus ? PuzzleColors.grey2 : PuzzleColors.grey1;
 
   @override
   Color get pageBackground => PuzzleColors.black;

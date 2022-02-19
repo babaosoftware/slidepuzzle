@@ -11,7 +11,7 @@ abstract class PuzzleTheme extends Equatable {
   Color tileTextColor(int value);
 
   Color get boardBackColor;
-  Color get boardBorderColor;
+  Color boardBorderColor(bool hasFocus);
 
   Color get pageBackground;
 

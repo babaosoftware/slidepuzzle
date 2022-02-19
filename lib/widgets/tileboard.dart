@@ -51,10 +51,10 @@ class _TileBoardState extends State<TileBoard> with TickerProviderStateMixin {
             Radius.circular(12.0),
           ),
           border: Border(
-            top: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
-            left: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
-            right: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
-            bottom: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor),
+            top: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor(false)),
+            left: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor(false)),
+            right: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor(false)),
+            bottom: BorderSide(width: 2.0, color: themeState.theme.boardBorderColor(false)),
           ),
         ),
         child: Padding(

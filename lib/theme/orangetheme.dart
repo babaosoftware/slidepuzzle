@@ -18,7 +18,7 @@ class OrangeTheme extends PuzzleTheme {
   @override
   Color get boardBackColor => const Color(0xC0FFA726);
   @override
-  Color get boardBorderColor => const Color(0xFFFF9100);
+  Color boardBorderColor(bool hasFocus) => hasFocus ? PuzzleColors.white : const Color(0xFFFF9100);
 
   @override
   Color get pageBackground => Colors.grey.shade800;

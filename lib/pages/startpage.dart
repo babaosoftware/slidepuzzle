@@ -6,7 +6,6 @@ import 'package:slidepuzzle/models/targetboard.dart';
 import 'package:slidepuzzle/pages/gamepage.dart';
 import 'package:slidepuzzle/state/themebloc.dart';
 import 'package:slidepuzzle/state/themeevent.dart';
-import 'package:slidepuzzle/theme/puzzletheme.dart';
 import 'package:slidepuzzle/widgets/themedialog.dart';
 import 'package:slidepuzzle/widgets/tileboardlight.dart';
 
