@@ -23,10 +23,12 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   final BoardType boardType;
   final int boardSize;
+  List<int> values = [];
 
   void _onInitializeGame(InitializeGame event, Emitter<GameState> emit) {
     if (!state.initialized) {
       Game newGame = Game(boardType, boardSize);
+      values = [];
       emit(state.copyWith(
         game: newGame,
         startGame: Game.copy(newGame),
@@ -42,6 +44,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onNewGame(NewGame event, Emitter<GameState> emit) {
     Game newGame = Game(boardType, boardSize);
+    values = [];
     emit(state.copyWith(
       game: newGame,
       startGame: Game.copy(newGame),
@@ -55,6 +58,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _onTileClick(TileClick event, Emitter<GameState> emit) {
     if (state.game.moveValue(event.value)) {
+      values = [];
       emit(state.copyWith(
         game: Game.copy(state.game),
         boardState: state.game.checkGameSolved() ? BoardState.end : BoardState.ongoing,
@@ -70,6 +74,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
     Game backGame = Game.copy(state.game);
     backGame.moveBack();
     int newCounter = state.counter - 1;
+    values = [];
     emit(state.copyWith(
       game: backGame,
       boardState: newCounter <= 0 ? BoardState.start : BoardState.ongoing,
@@ -81,6 +86,7 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   }
 
   void _onRestartGame(RestartGame event, Emitter<GameState> emit) {
+    values = [];
     emit(state.copyWith(
       game: Game.copy(state.startGame),
       boardState: BoardState.start,
@@ -110,9 +116,17 @@ class GameBloc extends Bloc<GameEvent, GameState> {
 
   void _gameHint(bool fromAutoPlay) {
     Timer(const Duration(milliseconds: 400), () async {
-      Hint hint = await calculateNextMove(Game.copy(state.game), state.hintStack);
       if (isClosed || fromAutoPlay && !state.autoPlay) return;
-      add(GameHintReceived(hint.value));
+      int value;
+      if (values.isNotEmpty) {
+        value = values.removeLast();
+      } else {
+        Hint hint = await calculateNextMove(Game.copy(state.game), state.hintStack);
+        values = hint.values;
+        value = values.isEmpty ? 0 : values.removeLast();
+      }
+      if (isClosed || fromAutoPlay && !state.autoPlay) return;
+      add(GameHintReceived(value));
       if (fromAutoPlay) {
         _gameHint(true);
       }
@@ -132,7 +146,6 @@ class GameBloc extends Bloc<GameEvent, GameState> {
   Future<Hint> calculateNextMove(Game game, List<Board> hintStack) {
     return compute(calculateMove, CalculateMoveParams(game, hintStack));
   }
-
 }
 
 class CalculateMoveParams {

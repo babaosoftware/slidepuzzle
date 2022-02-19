@@ -1,6 +1,7 @@
 import 'dart:collection';
 import 'dart:math';
 import 'package:collection/collection.dart';
+import 'package:flutter/material.dart';
 import 'package:quiver/collection.dart';
 
 import 'package:slidepuzzle/models/board.dart';
@@ -26,7 +27,7 @@ class Game {
     emptyCellValue = gameSize * gameSize;
     gameBoard = Board(gameSize, target);
     history = Queue<Board>();
-    if (newGame){
+    if (newGame) {
       simulateGame();
     }
   }
@@ -71,7 +72,7 @@ class Game {
 
   Hint getHint(Board gameBoard, List<Board>? hintStack) {
     if (checkSolved(gameBoard)) {
-      return Hint(emptyCellValue, 0);
+      return Hint(emptyCellValue, 0, []);
     }
 
     Set<String> visited = TreeSet<String>();
@@ -83,26 +84,31 @@ class Game {
 
     PriorityQueue<Saver> boards = PriorityQueue<Saver>((a, b) => a.compareTo(b));
     List<Cell> movableCells = findMovableCells(gameBoard);
-    int addCount = 0;
     for (Cell cell in movableCells) {
       Board newBoard = getNextBoard(cell, gameBoard);
       String boardKey = newBoard.getKey();
       if (!visited.contains(boardKey)) {
-        addCount++;
-        boards.add(Saver(newBoard, cell.value, 1));
+        boards.add(Saver(newBoard, null, cell.value, 1));
         visited.add(boardKey);
       }
     }
 
-    if (addCount == 1) {
-      Saver lastSaver = boards.removeFirst();
-      return Hint(lastSaver.value, lastSaver.count);
-    }
+    // if (addCount == 1) {
+    //   Saver lastSaver = boards.removeFirst();
+    //   return Hint(lastSaver.value, lastSaver.count);
+    // }
 
     while (true) {
       Saver saver = boards.removeFirst();
       if (checkSolved(saver.board)) {
-        return Hint(saver.value, saver.count);
+        List<int> values = [];
+        Saver? currentSaver = saver;
+        while (currentSaver != null) {
+          values.add(currentSaver.value);
+          currentSaver = currentSaver.prevSaver;
+        }
+        debugPrint('values count: ${values.length} boards count: ${boards.length}');
+        return Hint(values[values.length - 1], saver.count, values);
       }
       List<Cell> mCells = findMovableCells(saver.board);
       mCells.shuffle();
@@ -110,8 +116,7 @@ class Game {
         Board newBoard = getNextBoard(cell, saver.board);
         String boardKey = newBoard.getKey();
         if (!visited.contains(boardKey)) {
-          addCount++;
-          boards.add(Saver(newBoard, saver.value, saver.count + 1));
+          boards.add(Saver(newBoard, saver, cell.value, saver.count + 1));
           visited.add(boardKey);
         }
       }
