@@ -42,50 +42,52 @@ class _GamePageState extends State<GamePage> {
             BlocProvider.value(value: themeBloc),
           ],
           child: PuzzleKeyboardHandler(
-            child: Stack(children: [
-              Padding(
-                padding: const EdgeInsets.only(top: 30.0),
-                child: Center(
-                  child: smallScreen
-                      ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
-                      : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
+            child: SafeArea(
+              child: Stack(children: [
+                Padding(
+                  padding: const EdgeInsets.only(top: 30.0),
+                  child: Center(
+                    child: smallScreen
+                        ? Column(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets())
+                        : Row(mainAxisSize: MainAxisSize.min, mainAxisAlignment: MainAxisAlignment.center, children: buildWidgets()),
+                  ),
                 ),
-              ),
-              Positioned(
-                  top: 10,
-                  left: 10,
-                  right: 10,
-                  child: Row(
-                    children: [
-                      IconButton(
-                        onPressed: () {
-                          Navigator.pop(context);
-                        },
-                        icon: const Icon(Icons.arrow_back),
-                        color: themeBloc.state.theme.controlLabelColor,
-                      ),
-                      Expanded(
-                          child: Center(
-                              child: Text(
-                            widget.title,
-                            style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 30),
-                          )),
-                          flex: 1),
-                      // ThemeButton(themeBloc.state.theme.name, (index, newTheme) {
-                      //   themeBloc.add(ThemeChanged(themeIndex: index));
-                      // })
-                      IconButton(
-                          color: themeBloc.state.theme.controlLabelColor,
+                Positioned(
+                    top: 10,
+                    left: 10,
+                    right: 10,
+                    child: Row(
+                      children: [
+                        IconButton(
                           onPressed: () {
-                            themeBloc.add(const ThemeSound());
-                            setState(() {
-                              sound = !sound;
-                            });
+                            Navigator.pop(context);
                           },
-                          icon: Icon(sound ? Icons.volume_up : Icons.volume_off)),
-                    ],
-                  ))
-            ]),
+                          icon: const Icon(Icons.arrow_back),
+                          color: themeBloc.state.theme.controlLabelColor,
+                        ),
+                        Expanded(
+                            child: Center(
+                                child: Text(
+                              widget.title,
+                              style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 30),
+                            )),
+                            flex: 1),
+                        // ThemeButton(themeBloc.state.theme.name, (index, newTheme) {
+                        //   themeBloc.add(ThemeChanged(themeIndex: index));
+                        // })
+                        IconButton(
+                            color: themeBloc.state.theme.controlLabelColor,
+                            onPressed: () {
+                              themeBloc.add(const ThemeSound());
+                              setState(() {
+                                sound = !sound;
+                              });
+                            },
+                            icon: Icon(sound ? Icons.volume_up : Icons.volume_off)),
+                      ],
+                    ))
+              ]),
+            ),
           ),
         ));
   }

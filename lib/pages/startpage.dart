@@ -28,54 +28,56 @@ class _StartPageState extends State<StartPage> {
       child: Scaffold(
           backgroundColor: themeBloc.state.theme.pageBackground,
           appBar: null,
-          body: Stack(children: [
-            Positioned(
-              left: 0,
-              right: 0,
-              top: 80,
-              bottom: 0,
-              child: SingleChildScrollView(
-                child: smallScreen ? oneColumnTable() : twoColumnTable(),
+          body: SafeArea(
+            child: Stack(children: [
+              Positioned(
+                left: 0,
+                right: 0,
+                top: 80,
+                bottom: 0,
+                child: SingleChildScrollView(
+                  child: smallScreen ? oneColumnTable() : twoColumnTable(),
+                ),
               ),
-            ),
-            Positioned(
-                top: 20,
-                left: 10,
-                right: 10,
-                child: Row(
-                  children: [
-                    const IconButton(
-                        onPressed: null,
-                        icon: Icon(
-                          Icons.tune,
-                          color: Colors.transparent,
-                        )),
-                    Expanded(
-                        child: Center(
-                            child: Text(
-                          'Pick a board',
-                          style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 36),
-                        )),
-                        flex: 1),
-                    IconButton(
-                        color: themeBloc.state.theme.controlLabelColor,
-                        onPressed: () async {
-                          String? newTheme = await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return getThemeDialog(context, themeBloc.state.theme.name);
+              Positioned(
+                  top: 20,
+                  left: 10,
+                  right: 10,
+                  child: Row(
+                    children: [
+                      const IconButton(
+                          onPressed: null,
+                          icon: Icon(
+                            Icons.tune,
+                            color: Colors.transparent,
+                          )),
+                      Expanded(
+                          child: Center(
+                              child: Text(
+                            'Pick a board',
+                            style: TextStyle(color: themeBloc.state.theme.controlLabelColor, fontSize: 36),
+                          )),
+                          flex: 1),
+                      IconButton(
+                          color: themeBloc.state.theme.controlLabelColor,
+                          onPressed: () async {
+                            String? newTheme = await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return getThemeDialog(context, themeBloc.state.theme.name);
+                                });
+                            if (null != newTheme) {
+                              setState(() {
+                                currentTheme = newTheme;
                               });
-                          if (null != newTheme) {
-                            setState(() {
-                              currentTheme = newTheme;
-                            });
-                            themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme ?? "")));
-                          }
-                        },
-                        icon: const Icon(Icons.tune)),
-                  ],
-                ))
-          ])),
+                              themeBloc.add(ThemeChanged(themeIndex: getThemeIndex(currentTheme ?? "")));
+                            }
+                          },
+                          icon: const Icon(Icons.tune)),
+                    ],
+                  ))
+            ]),
+          )),
     );
   }
 
